@@ -889,7 +889,7 @@ export class SupabaseDocumentRepository implements DocumentRepository {
   }
 
   async updateDocument(documentId: string, updater: (document: DocumentRecord) => DocumentRecord) {
-    const current = await this.getDocumentById(documentId);
+    const current = await this.getDocumentByIdInternal(documentId);
 
     if (!current) {
       return null;
