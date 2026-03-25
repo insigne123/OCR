@@ -1,6 +1,7 @@
 import { ensureTrialApiClient } from "@/lib/public-api-auth";
 import { getOcrApiUrl, getOptionalOcrApiKey } from "@/lib/ocr-config";
 import { recordUsageLedgerEvent } from "@/lib/public-api-store";
+import { resolveOrProvisionPublicApiTenantId } from "@/lib/public-api-tenants";
 import { TrialAccessError, assertTrialClientActive, assertTrialQuotaAvailable, buildTrialUsageSnapshot, resolveTrialProcessingMode } from "@/lib/public-trial";
 
 export async function POST(request: Request) {
@@ -11,6 +12,7 @@ export async function POST(request: Request) {
     assertTrialClientActive(client);
     const usage = await buildTrialUsageSnapshot(client);
     assertTrialQuotaAvailable(usage, 1);
+    const resolvedTenantId = await resolveOrProvisionPublicApiTenantId(client.tenantId);
 
     const formData = await request.formData();
     const frontFile = formData.get("front_file");
@@ -42,7 +44,7 @@ export async function POST(request: Request) {
     await recordUsageLedgerEvent({
       dedupeKey: `trial-front-back:${client.id}:${Date.now()}:${frontFile.name}:${backFile.name}`,
       apiClientId: client.id,
-      tenantId: client.tenantId,
+      tenantId: resolvedTenantId,
       submissionId: null,
       batchId: null,
       documentId: null,
