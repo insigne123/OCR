@@ -88,6 +88,23 @@ async function buildWebhookPayloadForLog(log: {
   return { event: log.eventType };
 }
 
+async function ensureSubmissionDocumentReady(documentId: string) {
+  const initialDocument = await getDocumentByIdInternal(documentId);
+  if (!initialDocument) {
+    return null;
+  }
+  if (initialDocument.latestJob?.status !== "completed") {
+    return initialDocument;
+  }
+
+  const processing = await import("@/lib/document-processing");
+  if (processing.hasMaterializedProcessingResult(initialDocument)) {
+    return initialDocument;
+  }
+
+  return processing.finalizeProcessedDocument(documentId, initialDocument);
+}
+
 async function recordSubmissionUsage(submission: PublicSubmissionRecord, document: DocumentRecord, status: PublicSubmissionStatus) {
   await recordUsageLedgerEvent({
     dedupeKey: `submission-terminal:${submission.id}:${status}:${document.processedAt ?? document.updatedAt}`,
@@ -139,7 +156,7 @@ async function recordBatchUsage(batch: PublicBatchRecord, snapshot: PublicBatchS
 }
 
 export async function buildPublicSubmissionStatus(submission: PublicSubmissionRecord): Promise<PublicSubmissionStatusSnapshot> {
-  const document = await getDocumentByIdInternal(submission.documentId);
+  const document = await ensureSubmissionDocumentReady(submission.documentId);
   const status = derivePublicSubmissionStatus(document);
   return {
     submissionId: submission.id,
@@ -166,7 +183,7 @@ export async function buildPublicSubmissionStatus(submission: PublicSubmissionRe
 }
 
 export async function buildPublicSubmissionResult(submission: PublicSubmissionRecord): Promise<PublicSubmissionResult | null> {
-  const document = await getDocumentByIdInternal(submission.documentId);
+  const document = await ensureSubmissionDocumentReady(submission.documentId);
   if (!document) return null;
   const status = derivePublicSubmissionStatus(document);
   return {
@@ -187,7 +204,7 @@ export async function buildPublicSubmissionResult(submission: PublicSubmissionRe
 }
 
 export async function buildPublicSubmissionEnvelope(submission: PublicSubmissionRecord) {
-  const document = await getDocumentByIdInternal(submission.documentId);
+  const document = await ensureSubmissionDocumentReady(submission.documentId);
   const status = derivePublicSubmissionStatus(document);
   return {
     submission: await buildPublicSubmissionStatus(submission),

@@ -2,7 +2,7 @@ import { AUTO_COUNTRY_CODE, type DocumentFamily, type DocumentRecord } from "@oc
 
 import { getPublicApiLimits, normalizeRequestedDocumentFamily, normalizeRequestedProcessingMode } from "@/lib/public-api-auth";
 import { createDocumentFromUpload } from "@/lib/document-store";
-import { enqueueDocumentProcessing, processDocumentJob } from "@/lib/document-processing";
+import { enqueueDocumentProcessing, finalizeProcessedDocument, hasMaterializedProcessingResult, processDocumentJob } from "@/lib/document-processing";
 import { recordOpsAuditEvent } from "@/lib/ops-audit";
 import { createPublicBatch, createPublicSubmission, recordUsageLedgerEvent, updatePublicBatch } from "@/lib/public-api-store";
 import { normalizeCallbackUrl, normalizeManifestFileUrl } from "@/lib/public-api-security";
@@ -124,7 +124,10 @@ async function createSubmissionRecord(input: SubmissionInput) {
   });
 
   await enqueueDocumentProcessing(document.id, { force: true });
-  const processed = submission.processingMode === "sync" ? await processDocumentJob(document.id) : null;
+  let processed = submission.processingMode === "sync" ? await processDocumentJob(document.id) : null;
+  if (submission.processingMode === "sync" && processed && !hasMaterializedProcessingResult(processed)) {
+    processed = await finalizeProcessedDocument(document.id, processed);
+  }
 
   await recordOpsAuditEvent({
     action: "public_api.submission_created",

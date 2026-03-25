@@ -117,6 +117,17 @@ function mapDecisionToStatus(decision: DocumentDecision): DocumentStatus {
   return "completed";
 }
 
+export function hasMaterializedProcessingResult(document: DocumentRecord | null) {
+  if (!document) return false;
+  return Boolean(
+    document.processedAt &&
+      document.decision !== "pending" &&
+      document.globalConfidence !== null &&
+      document.extractedFields.length > 0 &&
+      document.reportSections.length > 0
+  );
+}
+
 function cloneStages(stages: ProcessingStageRecord[] | undefined) {
   return (stages && stages.length > 0 ? stages : createDefaultProcessingStages()).map((stage) => ({ ...stage }));
 }
@@ -661,6 +672,42 @@ export async function processDocumentJob(documentId: string) {
     }
     return persisted
   }
+}
+
+export async function finalizeProcessedDocument(documentId: string, currentDocument?: DocumentRecord | null) {
+  const current = currentDocument ?? (await getDocumentById(documentId));
+  if (!current) {
+    return null;
+  }
+
+  if (hasMaterializedProcessingResult(current)) {
+    return current;
+  }
+
+  const routing = resolveRoutingOverrides(current);
+  const remote = await runRemoteProcessing(current, {
+    visualEngine: routing.visualEngine,
+    decisionProfile: routing.decisionProfile,
+    structuredMode: routing.structuredMode,
+    ensembleMode: routing.ensembleMode,
+    ensembleEngines: routing.ensembleEngines,
+    fieldAdjudicationMode: routing.fieldAdjudicationMode,
+  });
+
+  const normalized = normalizeDocumentRecord({
+    ...current,
+    ...(remote ?? buildProcessedMockDocument(current)),
+  });
+
+  const finalized: DocumentRecord = {
+    ...normalized,
+    status: mapDecisionToStatus(normalized.decision),
+    processedAt: normalized.processedAt ?? nowIso(),
+    updatedAt: nowIso(),
+    reportHtml: normalized.reportHtml ?? buildReportHtml(normalized),
+  };
+
+  return updateDocument(documentId, () => finalized);
 }
 
 export async function getQueuedDocuments() {
