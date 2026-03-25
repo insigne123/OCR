@@ -34,6 +34,14 @@ def _crop_image(image: Image.Image, box: tuple[float, float, float, float]) -> I
     return image.crop((int(width * box[0]), int(height * box[1]), int(width * box[2]), int(height * box[3]))).convert("RGB")
 
 
+def _iter_candidate_images(page: PreprocessedPage) -> list[Image.Image]:
+    images = [Image.open(BytesIO(page.image_bytes)).convert("RGB")]
+    for profile in ("zoom_crop", "sharpen", "deglare", "clahe"):
+        if profile in page.variant_images:
+            images.append(Image.open(BytesIO(page.variant_images[profile])).convert("RGB"))
+    return images
+
+
 def _ocr_crop(image: Image.Image, box: tuple[float, float, float, float], engine_name: str = "rapidocr") -> str:
     crop = _crop_image(image, box)
     crop = ImageOps.autocontrast(crop, cutoff=1)
@@ -143,12 +151,19 @@ def extract_driver_license_chile_fields(prepared_pages: list[PreprocessedPage]) 
     if not prepared_pages:
         return {}
 
-    image = Image.open(BytesIO(prepared_pages[0].image_bytes)).convert("RGB")
+    candidate_images = _iter_candidate_images(prepared_pages[0])
+    image = candidate_images[0]
     address_text = _ocr_crop(image, (0.46, 0.62, 0.90, 0.69), engine_name="rapidocr")
     category_text = _ocr_crop(image, (0.46, 0.48, 0.52, 0.55), engine_name="rapidocr")
     dates_text = _ocr_crop(image, (0.38, 0.32, 0.90, 0.60), engine_name="rapidocr")
     name_text = _ocr_crop(image, (0.30, 0.12, 0.88, 0.36), engine_name="rapidocr")
     authority_text = _ocr_crop(image, (0.06, 0.06, 0.42, 0.20), engine_name="rapidocr")
+    if not category_text.strip() or not dates_text.strip():
+        for candidate in candidate_images[1:]:
+            category_text = category_text or _ocr_crop(candidate, (0.46, 0.48, 0.52, 0.55), engine_name="rapidocr")
+            dates_text = dates_text or _ocr_crop(candidate, (0.38, 0.32, 0.90, 0.60), engine_name="rapidocr")
+            if category_text.strip() and dates_text.strip():
+                break
     category_match = re.search(r"\b([A-E])\b", category_text.upper())
     address = _cleanup_driver_address(address_text)
 
@@ -192,7 +207,8 @@ def extract_identity_chile_front_fields(prepared_pages: list[PreprocessedPage]) 
     if not prepared_pages:
         return {}
 
-    image = Image.open(BytesIO(prepared_pages[0].image_bytes)).convert("RGB")
+    candidate_images = _iter_candidate_images(prepared_pages[0])
+    image = candidate_images[0]
     supplemental: dict[str, str] = {}
 
     names_text = _ocr_crop(image, (0.22, 0.20, 0.76, 0.50), engine_name="rapidocr")
@@ -225,6 +241,19 @@ def extract_identity_chile_front_fields(prepared_pages: list[PreprocessedPage]) 
 
     dates_text = _ocr_crop(image, (0.30, 0.42, 0.96, 0.74), engine_name="rapidocr")
     supplemental.update(_extract_identity_front_dates(dates_text))
+
+    if (not supplemental.get("sex") or not supplemental.get("issue_date") or not supplemental.get("expiry_date")) and len(candidate_images) > 1:
+        for candidate in candidate_images[1:]:
+            if not supplemental.get("sex"):
+                candidate_sex = _extract_gender_from_text(_ocr_crop(candidate, (0.52, 0.26, 0.77, 0.49), engine_name="rapidocr"))
+                if candidate_sex:
+                    supplemental["sex"] = candidate_sex
+            if not supplemental.get("issue_date") or not supplemental.get("expiry_date"):
+                candidate_dates = _extract_identity_front_dates(_ocr_crop(candidate, (0.30, 0.42, 0.96, 0.74), engine_name="rapidocr"))
+                for key, value in candidate_dates.items():
+                    supplemental.setdefault(key, value)
+            if supplemental.get("sex") and supplemental.get("issue_date") and supplemental.get("expiry_date"):
+                break
 
     issuer_text = _ocr_crop(image, (0.23, 0.10, 0.80, 0.24), engine_name="rapidocr")
     if "REGISTRO CIVIL" in issuer_text.upper():
@@ -261,7 +290,8 @@ def extract_identity_chile_back_fields(prepared_pages: list[PreprocessedPage]) -
     if not prepared_pages:
         return {}
 
-    image = Image.open(BytesIO(prepared_pages[0].image_bytes)).convert("RGB")
+    candidate_images = _iter_candidate_images(prepared_pages[0])
+    image = candidate_images[0]
     supplemental: dict[str, str] = {}
     mrz_text = _ocr_crop(image, (0.03, 0.70, 0.98, 0.98), engine_name="rapidocr")
     parsed = parse_identity_card_mrz(mrz_text)
@@ -282,6 +312,26 @@ def extract_identity_chile_back_fields(prepared_pages: list[PreprocessedPage]) -
         parts = [part.strip() for part in normalized.split("NACIO EN", 1)[-1].split() if part.strip()]
         if parts:
             supplemental["birth_place"] = _normalize_spaces(" ".join(parts[:3]))
+
+    if (not supplemental.get("mrz") or not supplemental.get("birth_place")) and len(candidate_images) > 1:
+        for candidate in candidate_images[1:]:
+            if not supplemental.get("mrz"):
+                candidate_parsed = parse_identity_card_mrz(_ocr_crop(candidate, (0.03, 0.70, 0.98, 0.98), engine_name="rapidocr"))
+                candidate_mrz = candidate_parsed.get("mrz")
+                if isinstance(candidate_mrz, str) and candidate_mrz:
+                    supplemental["mrz"] = candidate_mrz
+                    for key in ("document_number", "run", "birth_date", "expiry_date", "sex", "first_names", "last_names", "holder_name"):
+                        value = candidate_parsed.get(key)
+                        if isinstance(value, str) and value:
+                            supplemental.setdefault(key, value)
+            if not supplemental.get("birth_place"):
+                candidate_birth_place = _ocr_crop(candidate, (0.22, 0.36, 0.80, 0.60), engine_name="rapidocr")
+                normalized_candidate = _normalize_spaces(candidate_birth_place.upper())
+                match = re.search(r"NACIO\s+EN[:\s]+([A-Z ]{4,30})", normalized_candidate)
+                if match:
+                    supplemental["birth_place"] = _normalize_spaces(match.group(1))
+            if supplemental.get("mrz") and supplemental.get("birth_place"):
+                break
 
     return supplemental
 

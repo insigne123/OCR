@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from functools import lru_cache
 import os
+import re
 from pathlib import Path
 from time import perf_counter
 from typing import Sequence, cast
@@ -975,11 +976,11 @@ def _build_identity_cross_side_normalized(
     document_number = canonicalize_identity_document_number(
         "CL",
         _pick_non_missing(
-            front_values.get("numero-de-documento"),
-            front_values.get("numero"),
+            back_fallback.get("document_number"),
             back_values.get("numero-de-documento"),
             back_values.get("numero"),
-            back_fallback.get("document_number"),
+            front_values.get("numero-de-documento"),
+            front_values.get("numero"),
             cross_side_signal.front_identifier if cross_side_signal and cross_side_signal.front_identifier and "." in cross_side_signal.front_identifier else None,
             cross_side_signal.back_identifier if cross_side_signal and cross_side_signal.back_identifier and "." in cross_side_signal.back_identifier else None,
         ),
@@ -993,13 +994,13 @@ def _build_identity_cross_side_normalized(
             cross_side_signal.back_identifier if cross_side_signal and "-" in (cross_side_signal.back_identifier or "") else None,
         )
     )
-    birth_date = normalize_date_value(_pick_non_missing(back_fallback.get("birth_date"), front_values.get("fecha-de-nacimiento"), back_values.get("fecha-de-nacimiento")))
+    birth_date = normalize_date_value(_pick_non_missing(back_fallback.get("birth_date"), back_values.get("fecha-de-nacimiento"), front_values.get("fecha-de-nacimiento")))
     issue_date = normalize_date_value(_pick_non_missing(front_values.get("fecha-de-emision"), back_values.get("fecha-de-emision")))
-    expiry_date = normalize_date_value(_pick_non_missing(back_fallback.get("expiry_date"), front_values.get("fecha-de-vencimiento"), back_values.get("fecha-de-vencimiento")))
+    expiry_date = normalize_date_value(_pick_non_missing(back_fallback.get("expiry_date"), back_values.get("fecha-de-vencimiento"), front_values.get("fecha-de-vencimiento")))
     nationality = _pick_non_missing(front_values.get("nacionalidad"), back_values.get("nacionalidad"))
     sex = _pick_non_missing(back_fallback.get("sex"), front_values.get("sexo"), back_values.get("sexo"))
     issuer = _pick_non_missing(front_normalized.issuer, front_values.get("emisor"), back_normalized.issuer)
-    mrz_value = _pick_non_missing(front_values.get("mrz"), back_values.get("mrz"), back_fallback.get("mrz"))
+    mrz_value = _pick_non_missing(back_fallback.get("mrz"), back_values.get("mrz"), front_values.get("mrz"))
     birth_place = _pick_non_missing(back_fallback.get("birth_place"), back_values.get("lugar-de-nacimiento"), back_values.get("nacio-en"), front_values.get("lugar-de-nacimiento"))
     address = _pick_non_missing(back_values.get("domicilio"), back_values.get("direccion"))
     commune = _pick_non_missing(back_values.get("comuna"))
@@ -1011,6 +1012,7 @@ def _build_identity_cross_side_normalized(
         for value in (birth_place, address, commune, profession, electoral_circ)
         if not _is_missing_value(value)
     )
+    merged_issues = [*front_normalized.issues, *back_normalized.issues]
     merged_confidence = round(
         min(
             0.99,
@@ -1085,7 +1087,7 @@ def _build_identity_cross_side_normalized(
     return NormalizedDocument(
         document_family="identity",
         country="CL",
-        variant="identity-cl-front-text",
+        variant="identity-cl-front-back-text",
         issuer=issuer,
         holder_name=holder_name,
         global_confidence=merged_confidence,
@@ -1095,7 +1097,7 @@ def _build_identity_cross_side_normalized(
             "Se fusionaron frente y dorso usando normalizacion por lado para evitar mezclar campos entre paginas.",
             f"Se consolidaron {back_field_count} campo(s) de evidencia del dorso.",
         ],
-        issues=[],
+        issues=merged_issues,
         report_sections=report_sections,
         human_summary="Cedula chilena frente+dorso fusionada con consistencia cross-side y campos reversos integrados.",
     )
@@ -1416,6 +1418,32 @@ def _match_page_text(value: str | None, run: OCRRunInfo) -> tuple[str, int] | No
         if normalized_value in _compact(page.text):
             return value or page.text, page.page_number
     return None
+
+
+def _is_invalid_issue_date(issue_date: str | None) -> bool:
+    if issue_date is None:
+        return True
+    return not bool(re.fullmatch(r"\d{4}-\d{2}-\d{2}", issue_date))
+
+
+def _should_retry_identity_front(normalized: NormalizedDocument | None, document_side: str | None) -> bool:
+    if normalized is None or normalized.document_family != "identity" or normalized.country.upper() != "CL" or document_side != "front":
+        return False
+    values = _flatten_report_section_values(normalized.report_sections)
+    sex_value = values.get("sexo")
+    issue_date = values.get("fecha-de-emision")
+    expiry_date = values.get("fecha-de-vencimiento")
+    if _is_missing_value(sex_value):
+        return True
+    if _is_invalid_issue_date(issue_date):
+        return True
+    if issue_date and expiry_date:
+        try:
+            if date.fromisoformat(expiry_date) <= date.fromisoformat(issue_date):
+                return True
+        except ValueError:
+            return True
+    return False
 
 
 @lru_cache(maxsize=128)
@@ -2540,6 +2568,31 @@ def run_processing_pipeline(
                     normalization_engine = structured_normalizer.name
             except Exception:
                 pass
+
+    if normalized is not None and _should_retry_identity_front(normalized, effective_document_side):
+        retry_assumptions = list(normalization_request.assumptions or []) + [
+            "Se ejecuto targeted retry para campos criticos del frente (sexo/fechas).",
+        ]
+        retry_request = NormalizationRequest(
+            document_family=effective_family,
+            country=effective_country,
+            filename=filename,
+            variant=effective_variant,
+            pack_id=effective_pack_id,
+            document_side=effective_document_side,
+            assumptions=retry_assumptions,
+        )
+        retry_supplemental_fields = extract_supplemental_fields(
+            prepared_pages,
+            document_family=effective_family,
+            country=effective_country,
+            pack_id=effective_pack_id,
+            document_side=effective_document_side,
+        )
+        retried = _heuristic_normalize(retry_request, visual_text or extraction.text, supplemental_fields=retry_supplemental_fields)
+        if retried.global_confidence >= normalized.global_confidence or not _should_retry_identity_front(retried, effective_document_side):
+            normalized = retried
+            normalization_engine = f"{heuristic_normalizer.name}-visual-ocr-retry"
 
     if normalized is None and structured_mode == "openai" and not extraction.text and structured_normalizer.name != "heuristic" and (mime_type.startswith("image/") or suffix in {".png", ".jpg", ".jpeg", ".heic", ".heif", ".tif", ".tiff"}):
         try:
