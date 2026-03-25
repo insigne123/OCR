@@ -9,7 +9,7 @@ import type {
 import { createHmac } from "node:crypto";
 import { createDefaultProcessingStages, createExtractedFieldsFromSections, createJobSnapshot, normalizeDocumentRecord } from "@/lib/document-record";
 import { buildWebhookPayload } from "@/lib/document-export";
-import { getAllDocuments, getDocumentById, updateDocument } from "@/lib/document-store";
+import { getAllDocuments, getDocumentById, getDocumentByIdInternal, updateDocument } from "@/lib/document-store";
 import { recordOpsAuditEvent } from "@/lib/ops-audit";
 import { shouldRedactExternalPayloads } from "@/lib/pii";
 import { deliverQueuedPublicWebhooks, notifyPublicSubmissionProcessed } from "@/lib/public-api-status";
@@ -488,7 +488,7 @@ function withPipelineError(current: DocumentRecord, message: string, job: Proces
 }
 
 export async function enqueueDocumentProcessing(documentId: string, options?: { force?: boolean }) {
-  const document = await getDocumentById(documentId);
+  const document = await getDocumentByIdInternal(documentId);
 
   if (!document) {
     return null;
@@ -525,7 +525,7 @@ export async function enqueueDocumentProcessing(documentId: string, options?: { 
 }
 
 export async function processDocumentJob(documentId: string) {
-  const document = await getDocumentById(documentId);
+  const document = await getDocumentByIdInternal(documentId);
 
   if (!document) {
     return null;
@@ -544,7 +544,7 @@ export async function processDocumentJob(documentId: string) {
     updatedAt: nowIso()
   }));
 
-  const freshDocument = await getDocumentById(documentId);
+  const freshDocument = await getDocumentByIdInternal(documentId);
 
   if (!freshDocument) {
     return null;
