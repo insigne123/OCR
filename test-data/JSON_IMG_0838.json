@@ -1,0 +1,278 @@
+{
+  "rag": null,
+  "fields": {
+    "mrz": {
+      "value": "24326012",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.807335,
+              0.655172
+            ],
+            [
+              0.7947158372879228,
+              0.49583891126917623
+            ],
+            [
+              0.759298,
+              0.498644
+            ],
+            [
+              0.7719171627120773,
+              0.6579770887308237
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "sex": {
+      "value": null,
+      "locations": [],
+      "confidence": null
+    },
+    "address": {
+      "fields": {
+        "city": {
+          "value": null,
+          "locations": [],
+          "confidence": null
+        },
+        "state": {
+          "value": null,
+          "locations": [],
+          "confidence": null
+        },
+        "street": {
+          "value": "ALVARO CASANOVA 0360 CASA J",
+          "locations": [
+            {
+              "page": 0,
+              "polygon": [
+                [
+                  0.48916251419988915,
+                  0.6666417574362151
+                ],
+                [
+                  0.8498790326976657,
+                  0.6519601750408801
+                ],
+                [
+                  0.8491382352296817,
+                  0.6337592838584629
+                ],
+                [
+                  0.4884217167319051,
+                  0.648440866253798
+                ]
+              ]
+            }
+          ],
+          "confidence": null
+        },
+        "country": {
+          "value": null,
+          "locations": [],
+          "confidence": null
+        },
+        "postal_code": {
+          "value": null,
+          "locations": [],
+          "confidence": null
+        }
+      },
+      "locations": [],
+      "confidence": null
+    },
+    "category": {
+      "value": "B",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.4793991399282985,
+              0.5145569171517635
+            ],
+            [
+              0.505165,
+              0.512979
+            ],
+            [
+              0.5040718600717015,
+              0.4951290828482363
+            ],
+            [
+              0.478306,
+              0.496707
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "last_name": {
+      "value": "FAELLES YARUR GONGORA",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.149793,
+              0.690043
+            ],
+            [
+              0.30946978545130704,
+              0.6845263844223954
+            ],
+            [
+              0.3084014585547134,
+              0.6536039824062453
+            ],
+            [
+              0.1487246731034064,
+              0.6591205979838498
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "first_name": {
+      "value": "NICOLAS",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.14876,
+              0.67377
+            ],
+            [
+              0.22522414972650417,
+              0.6706693045619557
+            ],
+            [
+              0.22469,
+              0.657497
+            ],
+            [
+              0.14822585027349583,
+              0.6605976954380441
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "document_id": {
+      "value": "21.952.550-8",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.17044494613398517,
+              0.691693133586556
+            ],
+            [
+              0.1709738947384934,
+              0.7067855954163511
+            ],
+            [
+              0.2954669486045082,
+              0.7024224618297951
+            ],
+            [
+              0.294938,
+              0.68733
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "expiry_date": {
+      "value": "2030-10-13",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.571798,
+              0.731887
+            ],
+            [
+              0.698347,
+              0.727625
+            ],
+            [
+              0.6977071648037027,
+              0.7086267587385647
+            ],
+            [
+              0.5711581648037026,
+              0.7128887587385647
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "issued_date": {
+      "value": null,
+      "locations": [],
+      "confidence": null
+    },
+    "nationality": {
+      "value": "CHILE",
+      "locations": [],
+      "confidence": null
+    },
+    "country_code": {
+      "value": "CL",
+      "locations": [],
+      "confidence": null
+    },
+    "date_of_birth": {
+      "value": null,
+      "locations": [],
+      "confidence": null
+    },
+    "place_of_birth": {
+      "value": null,
+      "locations": [],
+      "confidence": null
+    },
+    "issuing_authority": {
+      "value": "LA REINA",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.628616,
+              0.547462
+            ],
+            [
+              0.512913,
+              0.553274
+            ],
+            [
+              0.5138487156127948,
+              0.5719018567699925
+            ],
+            [
+              0.6295517156127948,
+              0.5660898567699925
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    }
+  },
+  "raw_text": null
+}

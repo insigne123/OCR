@@ -1,0 +1,12 @@
+file,mime_type,status,document_family,country,variant,decision,global_confidence,review_required,page_count,processing_engine,extraction_source,issue_types,error
+enfermedades-2.png,image/png,ok,identity,CL,identity-cl-front-text,human_review,0.85,True,1,openai-structured,azure-document-intelligence,RULE_REQUIRED_FIELD|RULE_LOW_EVIDENCE,
+Image_260317_095254 (1).jpeg,image/jpeg,ok,unclassified,XX,,human_review,0.18,True,1,unsupported-document,binary-no-text,UNSUPPORTED_DOCUMENT,
+images (1).jpeg,image/jpeg,ok,unclassified,XX,,human_review,0.34,True,1,unsupported-document,azure-document-intelligence,UNSUPPORTED_DOCUMENT,
+images (2).jpeg,image/jpeg,ok,identity,PE,identity-pe-front-text,human_review,0.85,True,1,openai-structured,azure-document-intelligence,ocr_error|RULE_REQUIRED_FIELD,
+images (3).jpeg,image/jpeg,ok,identity,PE,identity-pe-front-text,human_review,0.85,True,1,openai-structured,azure-document-intelligence,ocr_error|missing_data|RULE_REQUIRED_FIELD|RULE_REQUIRED_FIELD,
+images.jpeg,image/jpeg,ok,identity,CO,identity-co-front-text,human_review,0.85,True,1,openai-structured,azure-document-intelligence,ocr_error|RULE_REQUIRED_FIELD,
+J7QQH5D6QNHUTHFA5HGW2WX3WQ.avif,image/avif,ok,identity,CL,identity-cl-front-text,human_review,0.9,True,1,openai-structured,azure-document-intelligence,RULE_REQUIRED_FIELD|RULE_LOW_EVIDENCE,
+maxresdefault.jpg,image/jpeg,ok,identity,CL,identity-cl-front-text,human_review,0.85,True,1,openai-structured,azure-document-intelligence,RULE_REQUIRED_FIELD|RULE_REQUIRED_FIELD|RULE_LOW_EVIDENCE,
+QLL3EDE2CZC6LA6NFO4EL5RSLY.avif,image/avif,ok,identity,CL,identity-cl-front-text,human_review,0.85,True,1,openai-structured,azure-document-intelligence,RULE_REQUIRED_FIELD|RULE_LOW_EVIDENCE,
+QVVVNMMQTJB5NKY7J6QMDIHHME.png,image/png,ok,identity,PE,identity-pe-front-text,accept_with_warning,0.95,True,1,openai-structured,azure-document-intelligence,,
+QXT6KJA7FNDR5PPJ2X37AULRDU.avif,image/avif,ok,identity,CL,identity-cl-front-text,human_review,0.8,True,1,openai-structured,azure-document-intelligence,RULE_REQUIRED_FIELD|RULE_LOW_EVIDENCE,

@@ -1,0 +1,4 @@
+file,mime_type,status,document_family,country,variant,decision,global_confidence,review_required,page_count,processing_engine,extraction_source,issue_types,error
+IMG_0840.jpeg,image/jpeg,ok,driver_license,CL,driver-license-text,auto_accept,0.987,False,1,heuristic-visual-ocr,rapidocr-local,,
+IMG_0841.jpeg,image/jpeg,ok,identity,CL,identity-cl-front-text,auto_accept,0.99,False,1,heuristic-visual-ocr,rapidocr-local,LOW_EVIDENCE|RULE_LOW_EVIDENCE,
+IMG_0842.jpeg,image/jpeg,ok,driver_license,CL,driver-license-text,auto_accept,0.99,False,1,heuristic-visual-ocr,rapidocr-local,,

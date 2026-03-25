@@ -1,0 +1,132 @@
+{
+  "config": {
+    "folder": "test-data",
+    "pattern": "IMG_08*",
+    "limit": 6,
+    "visual_engine": "auto",
+    "structured_mode": "auto",
+    "ensemble_mode": "always",
+    "ensemble_engines": "rapidocr,google-documentai,azure-document-intelligence",
+    "field_adjudication_mode": "auto"
+  },
+  "summary": {
+    "total_files": 6,
+    "processed_ok": 6,
+    "failed": 0,
+    "average_confidence": 0.18,
+    "by_decision": {
+      "human_review": 6
+    },
+    "by_family": {
+      "unclassified": 6
+    },
+    "by_country": {
+      "XX": 6
+    },
+    "unsupported_or_review": 6
+  },
+  "results": [
+    {
+      "file": "IMG_0820.HEIC",
+      "mime_type": "image/heic",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.18,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "binary-no-text",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "IMG_0821.HEIC",
+      "mime_type": "image/heic",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.18,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "binary-no-text",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "IMG_0822.HEIC",
+      "mime_type": "image/heic",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.18,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "binary-no-text",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "IMG_0823.HEIC",
+      "mime_type": "image/heic",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.18,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "binary-no-text",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "IMG_0824.HEIC",
+      "mime_type": "image/heic",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.18,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "binary-no-text",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "IMG_0825.HEIC",
+      "mime_type": "image/heic",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.18,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "binary-no-text",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    }
+  ]
+}

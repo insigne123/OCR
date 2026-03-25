@@ -1,0 +1,112 @@
+{
+  "documents": 2,
+  "average_confidence": 0.88,
+  "average_exact_match_rate": 0.1111,
+  "by_condition": [
+    {
+      "capture_condition": "clean",
+      "documents": 1,
+      "average_confidence": 0.76,
+      "exact_match_rate": 0.1111,
+      "accept_with_warning": 0,
+      "human_review": 1,
+      "auto_accept": 0
+    },
+    {
+      "capture_condition": "low_light",
+      "documents": 1,
+      "average_confidence": 1.0,
+      "exact_match_rate": 0.1111,
+      "accept_with_warning": 1,
+      "human_review": 0,
+      "auto_accept": 0
+    }
+  ],
+  "by_family": [
+    {
+      "family": "identity",
+      "documents": 2,
+      "average_confidence": 0.88,
+      "exact_match_rate": 0.1111,
+      "accept_with_warning": 1,
+      "human_review": 1,
+      "auto_accept": 0
+    }
+  ],
+  "by_country": [
+    {
+      "country": "CL",
+      "documents": 2,
+      "average_confidence": 0.88,
+      "exact_match_rate": 0.1111,
+      "accept_with_warning": 1,
+      "human_review": 1,
+      "auto_accept": 0
+    }
+  ],
+  "results": [
+    {
+      "filename": "images/synthetic-identity-cl-00000.png",
+      "family": "identity",
+      "country": "CL",
+      "pack_id": "identity-cl-front",
+      "capture_condition": "clean",
+      "decision": "human_review",
+      "global_confidence": 0.76,
+      "matched_fields": 1,
+      "total_fields": 9,
+      "exact_match_rate": 0.1111111111111111,
+      "issues": [
+        {
+          "type": "LOW_EVIDENCE",
+          "field": "Fechas",
+          "severity": "low"
+        },
+        {
+          "type": "LOW_EVIDENCE",
+          "field": "MRZ",
+          "severity": "low"
+        },
+        {
+          "type": "RULE_LOW_EVIDENCE",
+          "field": "mrz",
+          "severity": "low"
+        },
+        {
+          "type": "RULE_REQUIRED_FIELD",
+          "field": "dates",
+          "severity": "medium"
+        },
+        {
+          "type": "RULE_REQUIRED_FIELD",
+          "field": "birth_date",
+          "severity": "medium"
+        },
+        {
+          "type": "RULE_REQUIRED_FIELD",
+          "field": "expiry_date",
+          "severity": "medium"
+        }
+      ]
+    },
+    {
+      "filename": "images/synthetic-identity-cl-00001.png",
+      "family": "identity",
+      "country": "CL",
+      "pack_id": "identity-cl-front",
+      "capture_condition": "low_light",
+      "decision": "accept_with_warning",
+      "global_confidence": 1.0,
+      "matched_fields": 1,
+      "total_fields": 9,
+      "exact_match_rate": 0.1111111111111111,
+      "issues": [
+        {
+          "type": "RULE_LOW_EVIDENCE",
+          "field": "mrz",
+          "severity": "low"
+        }
+      ]
+    }
+  ]
+}

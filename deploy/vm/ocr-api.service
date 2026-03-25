@@ -1,0 +1,15 @@
+[Unit]
+Description=OCR Platform FastAPI
+After=network.target
+
+[Service]
+Type=simple
+User=ocr
+WorkingDirectory=/opt/ocr-platform
+EnvironmentFile=/etc/ocr-platform/ocr-api.env
+ExecStart=/opt/ocr-platform/.venv/bin/uvicorn app.main:app --app-dir /opt/ocr-platform/services/ocr-api --host 127.0.0.1 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

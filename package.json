@@ -1,0 +1,22 @@
+{
+  "name": "ocr-platform",
+  "private": true,
+  "packageManager": "npm@10.9.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace @ocr/web",
+    "build:web": "npm run build --workspace @ocr/web",
+    "typecheck": "npm run typecheck --workspace @ocr/shared && npm run typecheck --workspace @ocr/web",
+    "dev:ocr-api": "python -m uvicorn app.main:app --reload --app-dir services/ocr-api",
+    "check:python": "python -m compileall services/ocr-api/app",
+    "test:web": "node --test --experimental-strip-types apps/web/tests/training-dataset.test.ts apps/web/tests/pii.test.ts apps/web/tests/tenant-processing.test.ts apps/web/tests/routing-benchmark.test.ts apps/web/tests/ocr-cost.test.ts apps/web/tests/ops-insights.test.ts apps/web/tests/runtime-flags.test.ts apps/web/tests/public-api-auth.test.ts apps/web/tests/public-api-security.test.ts apps/web/tests/public-api-analytics.test.ts apps/web/tests/public-trial.test.ts",
+    "test:python": "python -m unittest discover -s services/ocr-api/tests -p \"test_*.py\"",
+    "test": "npm run test:web && npm run test:python",
+    "smoke": "node scripts/smoke-check.mjs",
+    "validate:supabase": "node scripts/validate-supabase.mjs",
+    "validate:providers": "python scripts/validate-ocr-providers.py"
+  }
+}

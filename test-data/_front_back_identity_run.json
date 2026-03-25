@@ -1,0 +1,371 @@
+{
+  "document_family": "identity",
+  "country": "CL",
+  "variant": "identity-cl-front-text",
+  "decision": "auto_accept",
+  "global_confidence": 0.99,
+  "holder_name": "NICOLAS FAELLES YARUR GONGORA",
+  "document_number": "B64.872.150",
+  "run": "21.952.550-8",
+  "birth_date": "2005-10-13",
+  "issue_date": "2025-12-02",
+  "expiry_date": "2035-10-13",
+  "birth_place": "PROVIDENCIA",
+  "issues": [],
+  "assumptions": [
+    "Se intento extraer texto embebido desde el PDF.",
+    "No se detecto texto embebido; el documento podria requerir OCR visual adicional.",
+    "Pagina 1: identity/CL/identity-cl-front-text/front (0.97)",
+    "Pagina 2: identity/CL/identity-cl-back-text/back (0.88)",
+    "Se detectaron frente y dorso del mismo documento en paginas separadas.",
+    "OCR visual ejecutado con rapidocr sobre perfil original.",
+    "Se selecciono rapidocr-local por mejor score OCR (0.910), clasificacion identity/CL (0.96, pack soportado).",
+    "Se aplico routing adaptativo: el OCR local fue suficiente y se omitieron motores premium.",
+    "Se aplico OCR visual local con RapidOCR sobre imagenes renderizadas del documento.",
+    "Se normalizo el frente de la cedula por separado antes de fusionar frente+dorso.",
+    "La validacion de identidad permanece conservadora para evitar autoaprobacion agresiva.",
+    "Se aplicaron heuristicas por pais para buscar identificadores, fechas y nombres antes de decidir review.",
+    "Contexto de lado documental: front.",
+    "Se intento extraer texto embebido desde el PDF.",
+    "No se detecto texto embebido; el documento podria requerir OCR visual adicional.",
+    "Pagina 1: identity/CL/identity-cl-front-text/front (0.97)",
+    "Pagina 2: identity/CL/identity-cl-back-text/back (0.88)",
+    "Se detectaron frente y dorso del mismo documento en paginas separadas.",
+    "OCR visual ejecutado con rapidocr sobre perfil original.",
+    "Se selecciono rapidocr-local por mejor score OCR (0.910), clasificacion identity/CL (0.96, pack soportado).",
+    "Se aplico routing adaptativo: el OCR local fue suficiente y se omitieron motores premium.",
+    "Se aplico OCR visual local con RapidOCR sobre imagenes renderizadas del documento.",
+    "Se normalizo el dorso de la cedula por separado antes de fusionar frente+dorso.",
+    "La validacion de identidad permanece conservadora para evitar autoaprobacion agresiva.",
+    "Se aplicaron heuristicas por pais para buscar identificadores, fechas y nombres antes de decidir review.",
+    "Contexto de lado documental: back.",
+    "Se fusionaron frente y dorso usando normalizacion por lado para evitar mezclar campos entre paginas.",
+    "Se consolidaron 1 campo(s) de evidencia del dorso.",
+    "Adjudicacion holder_name: abstencion segura.",
+    "Adjudicacion document_number: rapidocr-local.",
+    "Adjudicacion run: rapidocr-local.",
+    "Adjudicacion birth_date: abstencion segura.",
+    "Adjudicacion expiry_date: rapidocr-local.",
+    "Adjudicacion mrz: rapidocr-local.",
+    "Confidence recalibrada por evidencia operativa (quality 0.92, critical_fields 3/3, agreement 0.00 minimo).",
+    "Se aplicaron reglas deterministicas para documento de identidad por pais y variante.",
+    "Rule pack aplicado: identity-cl-front.",
+    "Evaluacion side-aware: front+back.",
+    "Perfil de decision: balanced.",
+    "Agreement minimo en campos criticos: 1.00.",
+    "Se evaluo consistencia cross-side a partir de paginas clasificadas como frente/dorso.",
+    "Se encontro al menos un identificador coincidente entre frente y dorso.",
+    "Pagina 1: identity/CL/identity-cl-front-text/front (0.97)",
+    "Pagina 2: identity/CL/identity-cl-back-text/back (0.88)",
+    "Se detectaron frente y dorso del mismo documento en paginas separadas.",
+    "Layout extraction: 1 pares clave-valor y 2 filas candidatas a tabla detectadas.",
+    "Clasificacion automatica: identity/CL (Detected identity-document wording.; Detected Chilean identity-card wording or TD1 fragments.; Textual family hint matched candidate pack.; Textual country hint matched candidate pack.; Matched keywords: REPUBLICA DE CHILE, REGISTRO CIVIL E IDENTIFICACION, CEDULA DE IDENTIDAD, NOMBRES.; Document-side hint matched candidate pack.)"
+  ],
+  "sections": [
+    {
+      "id": "summary",
+      "title": "Resumen",
+      "variant": "pairs",
+      "rows": [
+        [
+          "Documento",
+          "DOCUMENTO DE IDENTIDAD"
+        ],
+        [
+          "Archivo",
+          "_tmp_identity_front_back.pdf"
+        ],
+        [
+          "Pais",
+          "CL"
+        ],
+        [
+          "Lado",
+          "front+back"
+        ],
+        [
+          "Titular",
+          "NICOLAS FAELLES YARUR GONGORA"
+        ],
+        [
+          "Numero",
+          "B64.872.150"
+        ],
+        [
+          "RUN",
+          "21.952.550-8"
+        ],
+        [
+          "Emisor",
+          "REGISTRO CIVIL EIDENTIFICACION"
+        ]
+      ],
+      "body": null
+    },
+    {
+      "id": "dates",
+      "title": "Fechas",
+      "variant": "table",
+      "rows": [
+        [
+          "Fecha de nacimiento",
+          "2005-10-13"
+        ],
+        [
+          "Fecha de emision",
+          "2025-12-02"
+        ],
+        [
+          "Fecha de vencimiento",
+          "2035-10-13"
+        ]
+      ],
+      "body": null
+    },
+    {
+      "id": "identity",
+      "title": "Identidad",
+      "variant": "pairs",
+      "rows": [
+        [
+          "Nombre completo",
+          "NICOLAS FAELLES YARUR GONGORA"
+        ],
+        [
+          "Nombres",
+          "YARUR"
+        ],
+        [
+          "Apellidos",
+          "YARUR"
+        ],
+        [
+          "Numero de documento",
+          "B64.872.150"
+        ],
+        [
+          "Nacionalidad",
+          "CHILENA"
+        ],
+        [
+          "Sexo",
+          "M"
+        ],
+        [
+          "RUN",
+          "21.952.550-8"
+        ],
+        [
+          "MRZ",
+          "YARUR<GONGORA<<NICOLAS<FAELLES"
+        ]
+      ],
+      "body": null
+    },
+    {
+      "id": "reverse",
+      "title": "Dorso / campos reversos",
+      "variant": "pairs",
+      "rows": [
+        [
+          "Lugar de nacimiento",
+          "PROVIDENCIA"
+        ],
+        [
+          "Domicilio",
+          "NO DETECTADO"
+        ],
+        [
+          "Comuna",
+          "NO DETECTADA"
+        ],
+        [
+          "Profesion",
+          "NO DETECTADA"
+        ],
+        [
+          "Circunscripcion",
+          "NO DETECTADA"
+        ]
+      ],
+      "body": null
+    },
+    {
+      "id": "human-summary",
+      "title": "Resumen humano",
+      "variant": "text",
+      "rows": null,
+      "body": "Frente y dorso de la cedula chilena normalizados por separado y fusionados en una unica vista para validacion cruzada."
+    },
+    {
+      "id": "layout-kv",
+      "title": "Layout · pares detectados",
+      "variant": "table",
+      "rows": [
+        [
+          "PROVIDENCIA YARUR<GONGORA<<NICOLAS<FAELLES",
+          "Nacio en. INCHLB648721500S13< 0510132M3510133CHL2",
+          "2"
+        ]
+      ],
+      "body": null
+    },
+    {
+      "id": "layout-table-candidates",
+      "title": "Layout · filas candidatas a tabla",
+      "variant": "table",
+      "rows": [
+        [
+          "SEXO NUMERO DOCUMENTO B64.872.150 FECHADEVENCIMIENTO 13OCT2035"
+        ],
+        [
+          "CEDULADE IDENTIDAD 21.952.550-8"
+        ]
+      ],
+      "body": null
+    },
+    {
+      "id": "debug-ocr-ensemble",
+      "title": "OCR ensemble",
+      "variant": "table",
+      "rows": [
+        [
+          "rapidocr-local",
+          "original",
+          "YES",
+          "identity / CL",
+          "YES",
+          "0.910",
+          "33",
+          "0.84"
+        ]
+      ],
+      "body": null
+    },
+    {
+      "id": "debug-cross-side",
+      "title": "Cross-side consistency",
+      "variant": "table",
+      "rows": [
+        [
+          "B64872150",
+          "B64872150",
+          "YES"
+        ]
+      ],
+      "body": null
+    },
+    {
+      "id": "debug-field-adjudication",
+      "title": "Field adjudication",
+      "variant": "table",
+      "rows": [
+        [
+          "Titular",
+          "deterministic",
+          "YES",
+          "-",
+          "-",
+          "0.93"
+        ],
+        [
+          "Numero de documento",
+          "deterministic",
+          "NO",
+          "B64.872.150",
+          "rapidocr-local",
+          "0.88"
+        ],
+        [
+          "RUN",
+          "deterministic",
+          "NO",
+          "21.952.550-8",
+          "rapidocr-local",
+          "0.94"
+        ],
+        [
+          "Fecha de nacimiento",
+          "deterministic",
+          "YES",
+          "-",
+          "-",
+          "0.80"
+        ],
+        [
+          "Fecha de vencimiento",
+          "deterministic",
+          "NO",
+          "2035-10-13",
+          "rapidocr-local",
+          "0.89"
+        ],
+        [
+          "MRZ",
+          "deterministic",
+          "NO",
+          "YARUR<GONGORA<<NICOLAS<FAELLES",
+          "rapidocr-local",
+          "0.90"
+        ]
+      ],
+      "body": null
+    },
+    {
+      "id": "debug-pack-quality",
+      "title": "Pack quality",
+      "variant": "table",
+      "rows": [
+        [
+          "Titular",
+          "YES",
+          "YES",
+          "0.00",
+          "2",
+          "NO"
+        ],
+        [
+          "Numero de documento",
+          "YES",
+          "YES",
+          "1.00",
+          "1",
+          "NO"
+        ],
+        [
+          "RUN",
+          "YES",
+          "YES",
+          "1.00",
+          "1",
+          "NO"
+        ],
+        [
+          "Fecha de nacimiento",
+          "YES",
+          "NO",
+          "0.00",
+          "2",
+          "NO"
+        ],
+        [
+          "Fecha de vencimiento",
+          "YES",
+          "NO",
+          "1.00",
+          "1",
+          "NO"
+        ],
+        [
+          "MRZ",
+          "NO",
+          "NO",
+          "1.00",
+          "1",
+          "NO"
+        ]
+      ],
+      "body": null
+    }
+  ]
+}

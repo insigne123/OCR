@@ -1,0 +1,79 @@
+/* ═══════════════════════════════════════════════════════
+   Process Document Button · Premium CTA
+   ═══════════════════════════════════════════════════════ */
+
+.wrapper {
+  display: grid;
+  gap: 12px;
+  animation: fadeInUp var(--duration-normal) var(--ease) 100ms both;
+}
+
+.button {
+  position: relative;
+  width: 100%;
+  min-height: 50px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+  background-size: 200% 200%;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: -0.01em;
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25);
+  overflow: hidden;
+  transition:
+    transform var(--duration-fast) var(--ease),
+    box-shadow var(--duration-normal) var(--ease);
+}
+
+.button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+.button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.35);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2);
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.button:disabled::after {
+  animation: none;
+}
+
+.hint,
+.error {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.hint {
+  color: var(--text-muted);
+}
+
+.error {
+  color: var(--danger);
+  padding: 10px 14px;
+  border-radius: var(--radius-xs);
+  background: var(--danger-soft);
+  border: 1px solid rgba(248, 113, 113, 0.15);
+}

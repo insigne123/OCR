@@ -1,0 +1,15 @@
+[Unit]
+Description=OCR Platform Web
+After=network.target ocr-api.service
+
+[Service]
+Type=simple
+User=ocr
+WorkingDirectory=/opt/ocr-platform
+EnvironmentFile=/etc/ocr-platform/web.env
+ExecStart=/usr/bin/env bash -lc 'cd /opt/ocr-platform && npm run start --workspace @ocr/web'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

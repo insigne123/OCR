@@ -1,0 +1,255 @@
+{
+  "request_id": "6d6d7b1a-54e0-498b-a519-0ea74291b080",
+  "response_mode": "json",
+  "document": {
+    "family": "identity",
+    "country": "CL",
+    "variant": "dni-front",
+    "issuer": "Registro Civil (demo)",
+    "holder_name": "NOMBRE POR CONFIRMAR"
+  },
+  "processing": {
+    "request_id": "6d6d7b1a-54e0-498b-a519-0ea74291b080",
+    "response_mode": "json",
+    "page_count": 1,
+    "engine": "mock-pipeline",
+    "extraction_source": "binary-no-text",
+    "global_confidence": 0.78,
+    "decision": "human_review",
+    "review_required": true,
+    "processed_at": "2026-03-17T14:14:57.683512+00:00"
+  },
+  "fields": [
+    {
+      "id": "summary-documento",
+      "section": "summary",
+      "field_name": "documento",
+      "label": "Documento",
+      "value": "DOCUMENTO DE IDENTIDAD",
+      "raw_text": "DOCUMENTO DE IDENTIDAD",
+      "value_type": "text",
+      "confidence": 0.9,
+      "page_number": 1,
+      "issue_ids": [],
+      "bbox": null,
+      "evidence": {
+        "text": "DOCUMENTO DE IDENTIDAD"
+      }
+    },
+    {
+      "id": "summary-archivo",
+      "section": "summary",
+      "field_name": "archivo",
+      "label": "Archivo",
+      "value": "Image_260317_095254 (1).jpeg",
+      "raw_text": "Image_260317_095254 (1).jpeg",
+      "value_type": "text",
+      "confidence": 0.9,
+      "page_number": 1,
+      "issue_ids": [],
+      "bbox": null,
+      "evidence": {
+        "text": "Image_260317_095254 (1).jpeg"
+      }
+    },
+    {
+      "id": "summary-pais",
+      "section": "summary",
+      "field_name": "pais",
+      "label": "Pais",
+      "value": "CL",
+      "raw_text": "CL",
+      "value_type": "text",
+      "confidence": 0.9,
+      "page_number": 1,
+      "issue_ids": [],
+      "bbox": null,
+      "evidence": {
+        "text": "CL"
+      }
+    },
+    {
+      "id": "summary-titular",
+      "section": "summary",
+      "field_name": "titular",
+      "label": "Titular",
+      "value": "NOMBRE POR CONFIRMAR",
+      "raw_text": "NOMBRE POR CONFIRMAR",
+      "value_type": "text",
+      "confidence": 0.9,
+      "page_number": 1,
+      "issue_ids": [],
+      "bbox": null,
+      "evidence": {
+        "text": "NOMBRE POR CONFIRMAR"
+      }
+    },
+    {
+      "id": "summary-numero",
+      "section": "summary",
+      "field_name": "numero",
+      "label": "Numero",
+      "value": "ID-CL-DEMO-001",
+      "raw_text": "ID-CL-DEMO-001",
+      "value_type": "text",
+      "confidence": 0.9,
+      "page_number": 1,
+      "issue_ids": [],
+      "bbox": null,
+      "evidence": {
+        "text": "ID-CL-DEMO-001"
+      }
+    },
+    {
+      "id": "identity-nombre-completo",
+      "section": "identity",
+      "field_name": "nombre-completo",
+      "label": "Nombre completo",
+      "value": "NOMBRE POR CONFIRMAR",
+      "raw_text": "NOMBRE POR CONFIRMAR",
+      "value_type": "text",
+      "confidence": 0.9,
+      "page_number": 1,
+      "issue_ids": [],
+      "bbox": null,
+      "evidence": {
+        "text": "NOMBRE POR CONFIRMAR"
+      }
+    },
+    {
+      "id": "identity-numero-de-documento",
+      "section": "identity",
+      "field_name": "numero-de-documento",
+      "label": "Numero de documento",
+      "value": "ID-CL-DEMO-001",
+      "raw_text": "ID-CL-DEMO-001",
+      "value_type": "text",
+      "confidence": 0.74,
+      "page_number": 1,
+      "issue_ids": [
+        "issue-format-review"
+      ],
+      "bbox": null,
+      "evidence": {
+        "text": "ID-CL-DEMO-001"
+      }
+    },
+    {
+      "id": "identity-nacionalidad",
+      "section": "identity",
+      "field_name": "nacionalidad",
+      "label": "Nacionalidad",
+      "value": "CHILENA",
+      "raw_text": "CHILENA",
+      "value_type": "text",
+      "confidence": 0.9,
+      "page_number": 1,
+      "issue_ids": [],
+      "bbox": null,
+      "evidence": {
+        "text": "CHILENA"
+      }
+    },
+    {
+      "id": "identity-mrz",
+      "section": "identity",
+      "field_name": "mrz",
+      "label": "MRZ",
+      "value": "NO DETECTADA",
+      "raw_text": "NO DETECTADA",
+      "value_type": "text",
+      "confidence": 0.9,
+      "page_number": 1,
+      "issue_ids": [],
+      "bbox": null,
+      "evidence": {
+        "text": "NO DETECTADA"
+      }
+    }
+  ],
+  "document_family": "identity",
+  "country": "CL",
+  "variant": "dni-front",
+  "issuer": "Registro Civil (demo)",
+  "holder_name": "NOMBRE POR CONFIRMAR",
+  "page_count": 1,
+  "global_confidence": 0.78,
+  "decision": "human_review",
+  "review_required": true,
+  "assumptions": [
+    "Las fechas se normalizaron a formato ISO.",
+    "Los valores dudosos se mantuvieron con warning en lugar de inferencia agresiva.",
+    "El archivo no aporta texto utilizable sin OCR visual o interpretacion multimodal.",
+    "Se uso fallback mock porque el archivo no ofrecia texto extraible y no hubo normalizacion visual disponible."
+  ],
+  "issues": [
+    {
+      "id": "issue-format-review",
+      "type": "FORMAT_REVIEW",
+      "field": "Numero de documento",
+      "severity": "medium",
+      "message": "El numero debe validarse con reglas por pais antes de autoaprobar.",
+      "suggestedAction": "Aplicar reglas CL y validar frente/dorso."
+    }
+  ],
+  "report_sections": [
+    {
+      "id": "summary",
+      "title": "Resumen",
+      "variant": "pairs",
+      "columns": null,
+      "rows": [
+        [
+          "Documento",
+          "DOCUMENTO DE IDENTIDAD"
+        ],
+        [
+          "Archivo",
+          "Image_260317_095254 (1).jpeg"
+        ],
+        [
+          "Pais",
+          "CL"
+        ],
+        [
+          "Titular",
+          "NOMBRE POR CONFIRMAR"
+        ],
+        [
+          "Numero",
+          "ID-CL-DEMO-001"
+        ]
+      ],
+      "body": null,
+      "note": null
+    },
+    {
+      "id": "identity",
+      "title": "Identidad",
+      "variant": "pairs",
+      "columns": null,
+      "rows": [
+        [
+          "Nombre completo",
+          "NOMBRE POR CONFIRMAR"
+        ],
+        [
+          "Numero de documento",
+          "ID-CL-DEMO-001"
+        ],
+        [
+          "Nacionalidad",
+          "CHILENA"
+        ],
+        [
+          "MRZ",
+          "NO DETECTADA"
+        ]
+      ],
+      "body": null,
+      "note": null
+    }
+  ],
+  "human_summary": "Documento de identidad procesado con confidence moderada y listo para reglas por pais.",
+  "report_html": null
+}

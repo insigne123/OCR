@@ -1,0 +1,138 @@
+.panel,
+.card {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.panel {
+  padding: 20px;
+}
+
+.panelHeader,
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.eyebrow,
+.toolbarChip,
+.badge,
+.infoRow dt {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.toolbarChip,
+.badge,
+.actionSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.title {
+  margin: 6px 0 0;
+  font-size: 1.4rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.card {
+  padding: 18px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.cardMeta,
+.emptyState,
+.infoRow dd {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.cardMeta {
+  margin: 6px 0 0;
+}
+
+.infoList {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0 0;
+}
+
+.infoRow {
+  display: grid;
+  gap: 4px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.infoRow dd {
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.actionPrimary,
+.actionSecondary {
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 14px;
+}
+
+.actionPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #2d8cff 0%, #0a84ff 100%);
+  color: white;
+}
+
+.emptyState {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+@media (max-width: 960px) {
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .panelHeader,
+  .cardTop {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,2 @@
+file,mime_type,status,document_family,country,variant,decision,global_confidence,review_required,page_count,processing_engine,extraction_source,issue_types,error
+QVVVNMMQTJB5NKY7J6QMDIHHME.png,image/png,ok,identity,PE,identity-pe-front-text,accept_with_warning,0.89,False,1,heuristic-visual-ocr,rapidocr-local,,

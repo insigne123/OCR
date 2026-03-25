@@ -1,0 +1,12 @@
+file,mime_type,status,document_family,country,variant,decision,global_confidence,review_required,page_count,processing_engine,extraction_source,issue_types,error
+enfermedades-2.png,image/png,ok,identity,CL,identity-cl-front-text,human_review,0.86,True,1,heuristic-visual-ocr,rapidocr-local,MISSING_FIELD|FORMAT_REVIEW|RULE_REQUIRED_FIELD|RULE_LOW_EVIDENCE|RULE_DATE_CONSISTENCY,
+Image_260317_095254 (1).jpeg,image/jpeg,ok,identity,CL,identity-cl-front-text,human_review,0.86,True,1,heuristic-visual-ocr,rapidocr-local,FORMAT_REVIEW|RULE_LOW_EVIDENCE,
+images (1).jpeg,image/jpeg,ok,unclassified,XX,,human_review,0.34,True,1,unsupported-document,rapidocr-local,UNSUPPORTED_DOCUMENT,
+images (2).jpeg,image/jpeg,ok,unclassified,XX,,human_review,0.34,True,1,unsupported-document,rapidocr-local,UNSUPPORTED_DOCUMENT,
+images (3).jpeg,image/jpeg,ok,unclassified,XX,,human_review,0.34,True,1,unsupported-document,rapidocr-local,UNSUPPORTED_DOCUMENT,
+images.jpeg,image/jpeg,ok,unclassified,XX,,human_review,0.34,True,1,unsupported-document,rapidocr-local,UNSUPPORTED_DOCUMENT,
+J7QQH5D6QNHUTHFA5HGW2WX3WQ.avif,image/avif,ok,unclassified,XX,,human_review,0.18,True,1,unsupported-document,binary-no-text,UNSUPPORTED_DOCUMENT,
+maxresdefault.jpg,image/jpeg,ok,identity,CL,identity-cl-front-text,human_review,0.7400000000000002,True,1,heuristic-visual-ocr,rapidocr-local,MISSING_FIELD|MISSING_FIELD|FORMAT_REVIEW|RULE_REQUIRED_FIELD|RULE_REQUIRED_FIELD,
+QLL3EDE2CZC6LA6NFO4EL5RSLY.avif,image/avif,ok,unclassified,XX,,human_review,0.18,True,1,unsupported-document,binary-no-text,UNSUPPORTED_DOCUMENT,
+QVVVNMMQTJB5NKY7J6QMDIHHME.png,image/png,ok,unclassified,XX,,human_review,0.34,True,1,unsupported-document,rapidocr-local,UNSUPPORTED_DOCUMENT,
+QXT6KJA7FNDR5PPJ2X37AULRDU.avif,image/avif,ok,unclassified,XX,,human_review,0.18,True,1,unsupported-document,binary-no-text,UNSUPPORTED_DOCUMENT,

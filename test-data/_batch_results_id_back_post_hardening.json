@@ -1,0 +1,98 @@
+{
+  "config": {
+    "folder": "test-data",
+    "pattern": "IMG_084[3-6]*",
+    "limit": null,
+    "visual_engine": "auto",
+    "structured_mode": "auto",
+    "ensemble_mode": "always",
+    "ensemble_engines": "rapidocr,google-documentai,azure-document-intelligence",
+    "field_adjudication_mode": "auto"
+  },
+  "summary": {
+    "total_files": 4,
+    "processed_ok": 4,
+    "failed": 0,
+    "average_confidence": 0.34,
+    "by_decision": {
+      "human_review": 4
+    },
+    "by_family": {
+      "passport": 4
+    },
+    "by_country": {
+      "XX": 4
+    },
+    "unsupported_or_review": 4
+  },
+  "results": [
+    {
+      "file": "IMG_0843.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "passport",
+      "country": "XX",
+      "variant": "passport-text",
+      "decision": "human_review",
+      "global_confidence": 0.34,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "IMG_0844.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "passport",
+      "country": "XX",
+      "variant": "passport-text",
+      "decision": "human_review",
+      "global_confidence": 0.34,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "azure-document-intelligence",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "IMG_0845.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "passport",
+      "country": "XX",
+      "variant": "passport-text",
+      "decision": "human_review",
+      "global_confidence": 0.34,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "IMG_0846.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "passport",
+      "country": "XX",
+      "variant": "passport-text",
+      "decision": "human_review",
+      "global_confidence": 0.34,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    }
+  ]
+}

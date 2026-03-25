@@ -1,0 +1,223 @@
+{
+  "config": {
+    "folder": "test-data",
+    "visual_engine": "rapidocr",
+    "structured_mode": "heuristic"
+  },
+  "summary": {
+    "total_files": 11,
+    "processed_ok": 11,
+    "failed": 0,
+    "average_confidence": 0.4273,
+    "by_decision": {
+      "human_review": 11
+    },
+    "by_family": {
+      "identity": 3,
+      "unclassified": 8
+    },
+    "by_country": {
+      "CL": 3,
+      "XX": 8
+    },
+    "unsupported_or_review": 11
+  },
+  "results": [
+    {
+      "file": "enfermedades-2.png",
+      "mime_type": "image/png",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "human_review",
+      "global_confidence": 0.86,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "MISSING_FIELD",
+        "FORMAT_REVIEW",
+        "RULE_REQUIRED_FIELD",
+        "RULE_LOW_EVIDENCE",
+        "RULE_DATE_CONSISTENCY"
+      ]
+    },
+    {
+      "file": "Image_260317_095254 (1).jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "human_review",
+      "global_confidence": 0.86,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "FORMAT_REVIEW",
+        "RULE_LOW_EVIDENCE"
+      ]
+    },
+    {
+      "file": "images (1).jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.34,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "images (2).jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.34,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "images (3).jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.34,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "images.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.34,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "J7QQH5D6QNHUTHFA5HGW2WX3WQ.avif",
+      "mime_type": "image/avif",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.18,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "binary-no-text",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "maxresdefault.jpg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "human_review",
+      "global_confidence": 0.7400000000000002,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "MISSING_FIELD",
+        "MISSING_FIELD",
+        "FORMAT_REVIEW",
+        "RULE_REQUIRED_FIELD",
+        "RULE_REQUIRED_FIELD"
+      ]
+    },
+    {
+      "file": "QLL3EDE2CZC6LA6NFO4EL5RSLY.avif",
+      "mime_type": "image/avif",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.18,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "binary-no-text",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "QVVVNMMQTJB5NKY7J6QMDIHHME.png",
+      "mime_type": "image/png",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.34,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    },
+    {
+      "file": "QXT6KJA7FNDR5PPJ2X37AULRDU.avif",
+      "mime_type": "image/avif",
+      "status": "ok",
+      "document_family": "unclassified",
+      "country": "XX",
+      "variant": null,
+      "decision": "human_review",
+      "global_confidence": 0.18,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "unsupported-document",
+      "extraction_source": "binary-no-text",
+      "issue_types": [
+        "UNSUPPORTED_DOCUMENT"
+      ]
+    }
+  ]
+}

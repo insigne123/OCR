@@ -1,0 +1,170 @@
+{
+  "reports": [
+    {
+      "image": "IMG_0833.HEIC",
+      "reference": "test-data/JSON_IMG_0833.HEIC.json",
+      "document_family": "passport",
+      "decision": "accept_with_warning",
+      "global_confidence": 0.9,
+      "summary": {
+        "matches": 3,
+        "mismatches": 9,
+        "missing": 1
+      },
+      "comparisons": [
+        {
+          "field": "document_number",
+          "status": "mismatch",
+          "expected": "R06890435",
+          "actual": "YES"
+        },
+        {
+          "field": "surnames",
+          "status": "mismatch",
+          "expected": "GÓNGORA BRIONES",
+          "actual": "GONGORA"
+        },
+        {
+          "field": "given_names",
+          "status": "mismatch",
+          "expected": "PAOLA ANDREA",
+          "actual": "NACIONALIDAD/NATIONALITY"
+        },
+        {
+          "field": "holder_name",
+          "status": "match",
+          "expected": "PAOLA ANDREA GÓNGORA BRIONES",
+          "actual": "PAOLA ANDREA GONGORA BRIONES"
+        },
+        {
+          "field": "nationality",
+          "status": "match",
+          "expected": "CHILENA",
+          "actual": "CHILENA"
+        },
+        {
+          "field": "sex",
+          "status": "mismatch",
+          "expected": "F",
+          "actual": "NO DETECTADO"
+        },
+        {
+          "field": "birth_date",
+          "status": "mismatch",
+          "expected": "1973-10-15",
+          "actual": "YES"
+        },
+        {
+          "field": "issue_date",
+          "status": "match",
+          "expected": "2025-12-04",
+          "actual": "2025-12-04"
+        },
+        {
+          "field": "expiry_date",
+          "status": "mismatch",
+          "expected": "2035-12-03",
+          "actual": "YES"
+        },
+        {
+          "field": "authority",
+          "status": "mismatch",
+          "expected": "Servicio de Registro Civil e Identificación",
+          "actual": "Servicio De Registro Civil"
+        },
+        {
+          "field": "place_of_birth",
+          "status": "mismatch",
+          "expected": "LA REINA",
+          "actual": "FECHADEEMISION/DATEOF ISSUE"
+        },
+        {
+          "field": "mrz_line_1",
+          "status": "mismatch",
+          "expected": "PPCHLGONGORA<BRIONES<<PAOLA ANDREA<<<<<<<<<<<",
+          "actual": "NO"
+        },
+        {
+          "field": "mrz_line_2",
+          "status": "missing",
+          "expected": "R068904350CHL7310157F351203415385919<1<<<<66",
+          "actual": null
+        }
+      ]
+    },
+    {
+      "image": "IMG_0838.HEIC",
+      "reference": "test-data/JSON_IMG_0838.HEIC.json",
+      "document_family": "driver_license",
+      "decision": "accept_with_warning",
+      "global_confidence": 0.84,
+      "summary": {
+        "matches": 4,
+        "mismatches": 4,
+        "missing": 1
+      },
+      "comparisons": [
+        {
+          "field": "document_number",
+          "status": "mismatch",
+          "expected": "21.952.550-8",
+          "actual": "YES"
+        },
+        {
+          "field": "first_name",
+          "status": "match",
+          "expected": "NICOLAS",
+          "actual": "NICOLAS"
+        },
+        {
+          "field": "last_name",
+          "status": "match",
+          "expected": "FAELLES YARUR GONGORA",
+          "actual": "FAELLES YARUR GONGORA"
+        },
+        {
+          "field": "holder_name",
+          "status": "match",
+          "expected": "NICOLAS FAELLES YARUR GONGORA",
+          "actual": "NICOLAS FAELLES YARUR GONGORA"
+        },
+        {
+          "field": "category",
+          "status": "mismatch",
+          "expected": "B",
+          "actual": "NO"
+        },
+        {
+          "field": "expiry_date",
+          "status": "mismatch",
+          "expected": "2030-10-13",
+          "actual": "NO"
+        },
+        {
+          "field": "issued_date",
+          "status": "extra",
+          "expected": null,
+          "actual": "NO"
+        },
+        {
+          "field": "issuing_authority",
+          "status": "match",
+          "expected": "LA REINA",
+          "actual": "LA REINA"
+        },
+        {
+          "field": "address",
+          "status": "mismatch",
+          "expected": "ALVARO CASANOVA 0360 CASA J",
+          "actual": "NO DETECTADA"
+        },
+        {
+          "field": "nationality",
+          "status": "missing",
+          "expected": "CHILENA",
+          "actual": null
+        }
+      ]
+    }
+  ]
+}

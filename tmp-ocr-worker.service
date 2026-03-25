@@ -1,0 +1,14 @@
+[Unit]
+Description=OCR Platform Worker Loop
+After=ocr-web.service
+
+[Service]
+Type=simple
+User=nicog
+WorkingDirectory=/opt/ocr-platform
+ExecStart=/opt/ocr-platform/scripts/run-worker-loop.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

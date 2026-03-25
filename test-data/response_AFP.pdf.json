@@ -1,0 +1,37 @@
+{
+  "family": "certificate",
+  "expected_fields": {
+    "holder_name": "CRISTINA ALEJANDRA ORTEGA RODRIGUEZ",
+    "rut": "16.897.320-9",
+    "certificate_number": "39,732,031",
+    "issue_date": "2025-09-14",
+    "account": "1008-0760-0100199653",
+    "issuer": "AFP ProVida S.A."
+  },
+  "expected_tables": {
+    "movements": [
+      {
+        "period_label": "AGO-2025",
+        "renta_amount": "0",
+        "pension_amount": "0",
+        "cotization_code": "PERIODO SIN INFORMACION"
+      },
+      {
+        "period_label": "JUL-2025",
+        "renta_amount": "2,536,386",
+        "pension_amount": "253,639",
+        "employer": "AMERICA SPA",
+        "employer_rut": "77.012.071-3",
+        "date": "2025-08-12"
+      },
+      {
+        "period_label": "JUN-2025",
+        "renta_amount": "2,536,386",
+        "pension_amount": "253,639",
+        "employer": "AMERICA SPA",
+        "employer_rut": "77.012.071-3",
+        "date": "2025-07-11"
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+file,mime_type,status,document_family,country,variant,decision,global_confidence,review_required,page_count,processing_engine,extraction_source,issue_types,error
+IMG_0835(1).JPG,image/jpeg,ok,driver_license,CL,driver-license-text,auto_accept,0.99,False,1,heuristic-visual-ocr,rapidocr-local,,
+IMG_0835.JPG,image/jpeg,ok,driver_license,CL,driver-license-text,auto_accept,0.99,False,1,heuristic-visual-ocr,rapidocr-local,,
+IMG_0836.jpeg,image/jpeg,ok,driver_license,CL,driver-license-text,auto_accept,0.957,False,1,heuristic-visual-ocr,rapidocr-local,,
+IMG_0837.jpeg,image/jpeg,ok,driver_license,XX,driver-license-text,human_review,0.59,True,1,heuristic-visual-ocr,rapidocr-local,MISSING_FIELD|MISSING_FIELD|RULE_REQUIRED_FIELD,
+IMG_0838.jpeg,image/jpeg,ok,driver_license,CL,driver-license-text,auto_accept,0.99,False,1,heuristic-visual-ocr,rapidocr-local,,
+IMG_0839.jpeg,image/jpeg,ok,driver_license,CL,driver-license-text,auto_accept,0.99,False,1,heuristic-visual-ocr,rapidocr-local,,

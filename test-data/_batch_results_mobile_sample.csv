@@ -1,0 +1,7 @@
+file,mime_type,status,document_family,country,variant,decision,global_confidence,review_required,page_count,processing_engine,extraction_source,issue_types,error
+IMG_0820.HEIC,image/heic,ok,unclassified,XX,,human_review,0.18,True,1,unsupported-document,binary-no-text,UNSUPPORTED_DOCUMENT,
+IMG_0821.HEIC,image/heic,ok,unclassified,XX,,human_review,0.18,True,1,unsupported-document,binary-no-text,UNSUPPORTED_DOCUMENT,
+IMG_0822.HEIC,image/heic,ok,unclassified,XX,,human_review,0.18,True,1,unsupported-document,binary-no-text,UNSUPPORTED_DOCUMENT,
+IMG_0823.HEIC,image/heic,ok,unclassified,XX,,human_review,0.18,True,1,unsupported-document,binary-no-text,UNSUPPORTED_DOCUMENT,
+IMG_0824.HEIC,image/heic,ok,unclassified,XX,,human_review,0.18,True,1,unsupported-document,binary-no-text,UNSUPPORTED_DOCUMENT,
+IMG_0825.HEIC,image/heic,ok,unclassified,XX,,human_review,0.18,True,1,unsupported-document,binary-no-text,UNSUPPORTED_DOCUMENT,

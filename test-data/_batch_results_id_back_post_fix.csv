@@ -1,0 +1,5 @@
+file,mime_type,status,document_family,country,variant,decision,global_confidence,review_required,page_count,processing_engine,extraction_source,issue_types,error
+IMG_0843.jpeg,image/jpeg,ok,identity,CL,identity-cl-back-text,auto_accept,0.99,False,1,heuristic-visual-ocr,rapidocr-local,,
+IMG_0844.jpeg,image/jpeg,ok,identity,CL,identity-cl-back-text,auto_accept,0.987,False,1,heuristic-visual-ocr,rapidocr-local,,
+IMG_0845.jpeg,image/jpeg,ok,identity,CL,identity-cl-back-text,auto_accept,0.99,False,1,heuristic-visual-ocr,rapidocr-local,,
+IMG_0846.jpeg,image/jpeg,ok,identity,CL,identity-cl-back-text,auto_accept,0.99,False,1,heuristic-visual-ocr,rapidocr-local,,

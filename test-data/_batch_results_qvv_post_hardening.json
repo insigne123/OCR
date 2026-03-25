@@ -1,0 +1,45 @@
+{
+  "config": {
+    "folder": "test-data",
+    "pattern": "QVV*",
+    "limit": null,
+    "visual_engine": "auto",
+    "structured_mode": "auto",
+    "ensemble_mode": "always",
+    "ensemble_engines": "rapidocr,google-documentai,azure-document-intelligence",
+    "field_adjudication_mode": "auto"
+  },
+  "summary": {
+    "total_files": 1,
+    "processed_ok": 1,
+    "failed": 0,
+    "average_confidence": 0.89,
+    "by_decision": {
+      "accept_with_warning": 1
+    },
+    "by_family": {
+      "identity": 1
+    },
+    "by_country": {
+      "PE": 1
+    },
+    "unsupported_or_review": 0
+  },
+  "results": [
+    {
+      "file": "QVVVNMMQTJB5NKY7J6QMDIHHME.png",
+      "mime_type": "image/png",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "PE",
+      "variant": "identity-pe-front-text",
+      "decision": "accept_with_warning",
+      "global_confidence": 0.89,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    }
+  ]
+}

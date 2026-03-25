@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Costo por OCR - Mostly Local</title>
+  <style>
+    :root {
+      --bg: #f6f3ec;
+      --panel: rgba(255, 255, 255, 0.72);
+      --panel-strong: rgba(255, 255, 255, 0.9);
+      --text: #1f2330;
+      --muted: #5b6577;
+      --line: #cfd6df;
+      --accent: #2066f5;
+      --accent-soft: rgba(32, 102, 245, 0.16);
+      --accent-2: #ff7a18;
+      --accent-3: #1f9d6b;
+      --shadow: 0 24px 70px rgba(18, 27, 42, 0.12);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 122, 24, 0.14), transparent 30%),
+        radial-gradient(circle at top right, rgba(32, 102, 245, 0.14), transparent 28%),
+        linear-gradient(180deg, #f5f0e6 0%, #f7f9fc 52%, #eef4fb 100%);
+      min-height: 100vh;
+    }
+
+    .shell {
+      width: min(1160px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+
+    .hero,
+    .panel {
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 32px;
+      display: grid;
+      gap: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -60px -120px auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(32, 102, 245, 0.2), rgba(32, 102, 245, 0));
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.76rem;
+      color: var(--muted);
+      margin: 0 0 10px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      line-height: 0.98;
+      max-width: 820px;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(32, 102, 245, 0.08);
+    }
+
+    .metric label {
+      display: block;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .layout {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1.8fr 1fr;
+      gap: 18px;
+    }
+
+    .panel {
+      padding: 24px;
+    }
+
+    .panel h2 {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+    }
+
+    .panel .subcopy {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      gap: 8px;
+      background: rgba(31, 35, 48, 0.05);
+      padding: 6px;
+      border-radius: 999px;
+    }
+
+    .toggle-group button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 10px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 160ms ease;
+    }
+
+    .toggle-group button.active {
+      background: var(--text);
+      color: white;
+    }
+
+    .chart-wrap {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(246,250,255,0.86));
+      border: 1px solid rgba(18, 27, 42, 0.08);
+      padding: 14px;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .legend-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .side-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .side-card {
+      padding: 16px 16px 14px;
+      border-radius: 18px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(18, 27, 42, 0.08);
+    }
+
+    .side-card strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .side-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.95rem;
+    }
+
+    .data-table {
+      margin-top: 18px;
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(18, 27, 42, 0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255,255,255,0.78);
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(18, 27, 42, 0.08);
+      font-size: 0.95rem;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.8rem;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .callout {
+      margin-top: 18px;
+      padding: 16px 18px;
+      background: linear-gradient(135deg, rgba(32, 102, 245, 0.1), rgba(31, 157, 107, 0.11));
+      border-radius: 18px;
+      color: var(--text);
+      border: 1px solid rgba(32, 102, 245, 0.14);
+      line-height: 1.55;
+    }
+
+    code {
+      background: rgba(18, 27, 42, 0.08);
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.92em;
+    }
+
+    @media (max-width: 980px) {
+      .summary-grid,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Escenario Mostly Local</p>
+        <h1>Asi evoluciona el costo promedio por OCR cuando sube el volumen mensual.</h1>
+      </div>
+      <p>
+        Este grafico usa un modelo ilustrativo para un stack mayoritariamente local: OCR local, muy poco OCR premium, poca revision humana
+        y escalado por tramos de infraestructura. La tendencia general es de economia de escala, con pequenos saltos cuando toca subir de tier.
+      </p>
+
+      <div class="summary-grid">
+        <article class="metric">
+          <label>Costo mas bajo del modelo</label>
+          <strong id="lowestCostMetric">1,03 CLP</strong>
+          <span>En torno a 60k OCR/mes</span>
+        </article>
+        <article class="metric">
+          <label>Volumen de referencia</label>
+          <strong>40k+</strong>
+          <span>El costo unitario deberia seguir siendo competitivo</span>
+        </article>
+        <article class="metric">
+          <label>Tipo de comportamiento</label>
+          <strong>Dientes de sierra</strong>
+          <span>Baja, pega un salto por upgrade y vuelve a bajar</span>
+        </article>
+        <article class="metric">
+          <label>Driver principal</label>
+          <strong>Infra fija</strong>
+          <span>Mientras el OCR siga mostly local, la escala ayuda</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="layout">
+      <article class="panel">
+        <div class="toolbar">
+          <div>
+            <h2>Curva visual</h2>
+            <p class="subcopy">La linea muestra el costo promedio unitario. Las lineas verticales marcan cambios de capacidad o tier.</p>
+          </div>
+          <div class="toggle-group" aria-label="Moneda">
+            <button class="active" data-currency="CLP" type="button">CLP / OCR</button>
+            <button data-currency="USD" type="button">USD / OCR</button>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <svg id="chart" viewBox="0 0 760 420" role="img" aria-label="Grafico de costo por OCR segun volumen mensual"></svg>
+        </div>
+
+        <div class="legend">
+          <span class="legend-item"><span class="legend-dot" style="background: var(--accent)"></span>Costo promedio por OCR</span>
+          <span class="legend-item"><span class="legend-dot" style="background: var(--accent-2)"></span>Saltos por upgrade de infraestructura</span>
+          <span class="legend-item"><span class="legend-dot" style="background: var(--accent-3)"></span>Tendencia de economia de escala</span>
+        </div>
+
+        <div class="callout">
+          Si logran un flujo <code>mostly local</code>, el costo por OCR normalmente <strong>baja con el volumen</strong>. Lo que rompe la curva perfecta
+          son los upgrades de capacidad: por eso la grafica no es una pendiente lisa infinita, sino una curva con pequenos escalones.
+        </div>
+      </article>
+
+      <aside class="panel">
+        <h2>Lectura ejecutiva</h2>
+        <p class="subcopy">Lo importante no es solo cuantas OCR haces, sino en que mezcla de costo cae cada una.</p>
+        <div class="side-list">
+          <article class="side-card">
+            <strong>1. Bajar al principio es facil</strong>
+            <p>Con poca carga, el costo fijo pesa mucho. Cuando pasas de 5k a 20k, el costo unitario cae fuerte.</p>
+          </article>
+          <article class="side-card">
+            <strong>2. Los 40k no deberian asustar</strong>
+            <p>Si el OCR sigue local y la revision humana no se dispara, 40k+ sigue siendo una zona sana para costo unitario.</p>
+          </article>
+          <article class="side-card">
+            <strong>3. Los picos vienen por upgrades</strong>
+            <p>Cuando cambias de VM o de tier, el costo por OCR sube un poco; luego vuelve a bajar cuando llenas esa capacidad.</p>
+          </article>
+          <article class="side-card">
+            <strong>4. El enemigo real no es el volumen</strong>
+            <p>Lo que encarece de verdad es meter OCR premium, mucha retencion de archivos o demasiada revision humana.</p>
+          </article>
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel" style="margin-top: 18px;">
+      <h2>Datos usados en la curva</h2>
+      <p class="subcopy">Valores ilustrativos para visualizar la forma de la curva. Sirven para entender la tendencia, no como cotizacion final.</p>
+      <div class="data-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Volumen mensual</th>
+              <th>Costo total / mes</th>
+              <th>Costo unitario CLP</th>
+              <th>Costo unitario USD</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const usdClp = 970;
+    const dataset = [
+      { volume: 1000, totalClp: 12222, unitClp: 12.22, unitUsd: 0.0126 },
+      { volume: 2000, totalClp: 6402, unitClp: 6.40, unitUsd: 0.0066 },
+      { volume: 5000, totalClp: 14550, unitClp: 2.91, unitUsd: 0.0030 },
+      { volume: 10000, totalClp: 17460, unitClp: 1.75, unitUsd: 0.0018 },
+      { volume: 20000, totalClp: 23280, unitClp: 1.16, unitUsd: 0.0012 },
+      { volume: 40000, totalClp: 50440, unitClp: 1.26, unitUsd: 0.0013 },
+      { volume: 60000, totalClp: 62080, unitClp: 1.03, unitUsd: 0.0011 },
+      { volume: 80000, totalClp: 99910, unitClp: 1.25, unitUsd: 0.0013 },
+      { volume: 100000, totalClp: 111550, unitClp: 1.12, unitUsd: 0.0011 },
+      { volume: 150000, totalClp: 179450, unitClp: 1.20, unitUsd: 0.0012 },
+      { volume: 200000, totalClp: 208550, unitClp: 1.04, unitUsd: 0.0011 }
+    ];
+
+    const tiers = [20000, 60000, 120000];
+    let currency = "CLP";
+
+    const chart = document.getElementById("chart");
+    const tableBody = document.getElementById("tableBody");
+    const buttons = [...document.querySelectorAll("[data-currency]")];
+
+    const palette = {
+      grid: "rgba(18, 27, 42, 0.10)",
+      text: "#5b6577",
+      axis: "rgba(18, 27, 42, 0.16)",
+      line: "#2066f5",
+      area: "rgba(32, 102, 245, 0.14)",
+      point: "#ffffff",
+      tier: "rgba(255, 122, 24, 0.55)",
+      trend: "rgba(31, 157, 107, 0.24)"
+    };
+
+    function formatNumber(value) {
+      return new Intl.NumberFormat("es-CL").format(value);
+    }
+
+    function formatCurrency(value, activeCurrency) {
+      if (activeCurrency === "USD") {
+        return value.toFixed(4) + " USD";
+      }
+      return value.toFixed(2).replace('.', ',') + " CLP";
+    }
+
+    function getSeriesValue(row) {
+      return currency === "USD" ? row.unitUsd : row.unitClp;
+    }
+
+    function create(tag, attrs = {}) {
+      const node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+      return node;
+    }
+
+    function renderTable() {
+      tableBody.innerHTML = "";
+      dataset.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${formatNumber(row.volume)}</td>
+          <td>${formatNumber(row.totalClp)} CLP</td>
+          <td>${row.unitClp.toFixed(2).replace('.', ',')} CLP</td>
+          <td>${row.unitUsd.toFixed(4)} USD</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    function renderChart() {
+      chart.innerHTML = "";
+      const width = 760;
+      const height = 420;
+      const margin = { top: 28, right: 26, bottom: 56, left: 78 };
+      const innerWidth = width - margin.left - margin.right;
+      const innerHeight = height - margin.top - margin.bottom;
+      const xMin = Math.min(...dataset.map((row) => row.volume));
+      const xMax = Math.max(...dataset.map((row) => row.volume));
+      const values = dataset.map(getSeriesValue);
+      const yMin = Math.min(...values) * 0.9;
+      const yMax = Math.max(...values) * 1.06;
+
+      const x = (value) => margin.left + ((value - xMin) / (xMax - xMin)) * innerWidth;
+      const y = (value) => margin.top + innerHeight - ((value - yMin) / (yMax - yMin)) * innerHeight;
+
+      const bg = create("rect", {
+        x: margin.left,
+        y: margin.top,
+        width: innerWidth,
+        height: innerHeight,
+        rx: 18,
+        fill: "rgba(255,255,255,0.48)"
+      });
+      chart.appendChild(bg);
+
+      const yTicks = 5;
+      for (let index = 0; index <= yTicks; index += 1) {
+        const value = yMin + ((yMax - yMin) / yTicks) * index;
+        const lineY = y(value);
+        chart.appendChild(create("line", {
+          x1: margin.left,
+          y1: lineY,
+          x2: margin.left + innerWidth,
+          y2: lineY,
+          stroke: palette.grid,
+          "stroke-width": 1
+        }));
+
+        const label = create("text", {
+          x: margin.left - 16,
+          y: lineY + 5,
+          fill: palette.text,
+          "font-size": 12,
+          "text-anchor": "end"
+        });
+        label.textContent = currency === "USD" ? value.toFixed(3) : value.toFixed(1).replace('.', ',');
+        chart.appendChild(label);
+      }
+
+      dataset.forEach((row) => {
+        const lineX = x(row.volume);
+        const label = create("text", {
+          x: lineX,
+          y: margin.top + innerHeight + 30,
+          fill: palette.text,
+          "font-size": 12,
+          "text-anchor": "middle"
+        });
+        label.textContent = row.volume >= 1000 ? (row.volume / 1000) + "k" : row.volume;
+        chart.appendChild(label);
+      });
+
+      tiers.forEach((tier) => {
+        const tierX = x(tier);
+        chart.appendChild(create("line", {
+          x1: tierX,
+          y1: margin.top,
+          x2: tierX,
+          y2: margin.top + innerHeight,
+          stroke: palette.tier,
+          "stroke-width": 1.5,
+          "stroke-dasharray": "7 6"
+        }));
+      });
+
+      const points = dataset.map((row) => [x(row.volume), y(getSeriesValue(row))]);
+      const linePath = points.map((point, index) => `${index === 0 ? "M" : "L"} ${point[0]} ${point[1]}`).join(" ");
+      const areaPath = `${linePath} L ${points[points.length - 1][0]} ${margin.top + innerHeight} L ${points[0][0]} ${margin.top + innerHeight} Z`;
+
+      chart.appendChild(create("path", {
+        d: areaPath,
+        fill: palette.area
+      }));
+
+      chart.appendChild(create("path", {
+        d: linePath,
+        fill: "none",
+        stroke: palette.line,
+        "stroke-width": 4,
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round"
+      }));
+
+      chart.appendChild(create("path", {
+        d: `M ${points[0][0]} ${points[0][1]} L ${points[4][0]} ${points[4][1]} L ${points[6][0]} ${points[6][1]}`,
+        fill: "none",
+        stroke: palette.trend,
+        "stroke-width": 12,
+        "stroke-linecap": "round",
+        opacity: 0.7
+      }));
+
+      points.forEach((point, index) => {
+        chart.appendChild(create("circle", {
+          cx: point[0],
+          cy: point[1],
+          r: 6.5,
+          fill: palette.point,
+          stroke: palette.line,
+          "stroke-width": 3
+        }));
+
+        if ([2, 4, 6, 8, 10].includes(index)) {
+          const valueLabel = create("text", {
+            x: point[0],
+            y: point[1] - 14,
+            fill: palette.text,
+            "font-size": 12,
+            "font-weight": 700,
+            "text-anchor": "middle"
+          });
+          valueLabel.textContent = currency === "USD"
+            ? dataset[index].unitUsd.toFixed(4)
+            : dataset[index].unitClp.toFixed(2).replace('.', ',');
+          chart.appendChild(valueLabel);
+        }
+      });
+
+      const xAxis = create("line", {
+        x1: margin.left,
+        y1: margin.top + innerHeight,
+        x2: margin.left + innerWidth,
+        y2: margin.top + innerHeight,
+        stroke: palette.axis,
+        "stroke-width": 1.4
+      });
+      chart.appendChild(xAxis);
+
+      const yAxis = create("line", {
+        x1: margin.left,
+        y1: margin.top,
+        x2: margin.left,
+        y2: margin.top + innerHeight,
+        stroke: palette.axis,
+        "stroke-width": 1.4
+      });
+      chart.appendChild(yAxis);
+
+      const xTitle = create("text", {
+        x: margin.left + innerWidth / 2,
+        y: height - 14,
+        fill: palette.text,
+        "font-size": 13,
+        "font-weight": 700,
+        "text-anchor": "middle"
+      });
+      xTitle.textContent = "Volumen mensual de OCR";
+      chart.appendChild(xTitle);
+
+      const yTitle = create("text", {
+        x: 24,
+        y: margin.top + innerHeight / 2,
+        fill: palette.text,
+        "font-size": 13,
+        "font-weight": 700,
+        transform: `rotate(-90 24 ${margin.top + innerHeight / 2})`,
+        "text-anchor": "middle"
+      });
+      yTitle.textContent = currency === "USD" ? "Costo promedio USD / OCR" : "Costo promedio CLP / OCR";
+      chart.appendChild(yTitle);
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        currency = button.dataset.currency;
+        buttons.forEach((entry) => entry.classList.toggle("active", entry === button));
+        renderChart();
+      });
+    });
+
+    renderTable();
+    renderChart();
+  </script>
+</body>
+</html>

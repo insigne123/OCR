@@ -1,0 +1,455 @@
+/* ═══════════════════════════════════════════════════════
+   Document Detail · Premium Inspector View
+   ═══════════════════════════════════════════════════════ */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  overflow: hidden;
+}
+
+.mainColumn,
+.sideColumn {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
+.sideColumn {
+  position: sticky;
+  top: 0;
+}
+
+/* ── Toolbar ── */
+
+.toolbarAction,
+.tag,
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition:
+    background var(--duration-fast) var(--ease),
+    border-color var(--duration-fast) var(--ease),
+    transform var(--duration-fast) var(--ease);
+}
+
+.toolbarAction {
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--accent-strong);
+}
+
+.toolbarAction:hover {
+  background: rgba(59, 130, 246, 0.14);
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+.tag,
+.badgeNeutral {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+}
+
+/* ── Badges ── */
+
+.badge {
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 0.75rem;
+  min-height: 30px;
+  padding: 0 10px;
+}
+
+.badgeOk {
+  background: var(--success-soft);
+  color: var(--success);
+  border-color: rgba(52, 211, 153, 0.2);
+}
+
+.badgeWarn {
+  background: var(--warning-soft);
+  color: var(--warning);
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
+.badgeReview,
+.badgeLive {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.badgeBlocked {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border-color: rgba(248, 113, 113, 0.2);
+}
+
+/* ── Shared Card/Panel Base ── */
+
+.sidebarCard,
+.metricCard,
+.panel,
+.issueCard,
+.sectionBlock,
+.assumptionBox {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.025);
+  transition:
+    border-color var(--duration-normal) var(--ease),
+    box-shadow var(--duration-normal) var(--ease),
+    transform var(--duration-normal) var(--ease);
+}
+
+.sidebarCard,
+.metricCard,
+.panel {
+  padding: 20px;
+}
+
+/* ── Sidebar Card ── */
+
+.sidebarLabel,
+.metricLabel,
+.panelEyebrow,
+.infoRow dt,
+.issueType {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.sidebarValue,
+.metricValue {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.sidebarText,
+.metricNote,
+.bodyText,
+.note,
+.emptyState,
+.infoRow dd,
+.assumptionList {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.bodyText,
+.note {
+  margin: 6px 0 0;
+}
+
+.sidebarText,
+.metricNote {
+  margin: 8px 0 0;
+}
+
+/* ═══ METRICS ═══ */
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metricCard {
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp var(--duration-normal) var(--ease) both;
+}
+
+.metricCard:nth-child(1) { animation-delay: 0ms; }
+.metricCard:nth-child(2) { animation-delay: 60ms; }
+.metricCard:nth-child(3) { animation-delay: 120ms; }
+.metricCard:nth-child(4) { animation-delay: 180ms; }
+
+.metricCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 2px;
+  border-radius: 0 0 2px 2px;
+  opacity: 0.5;
+}
+
+.metricCard:nth-child(1)::before {
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.metricCard:nth-child(2)::before {
+  background: linear-gradient(90deg, transparent, var(--warning), transparent);
+}
+.metricCard:nth-child(3)::before {
+  background: linear-gradient(90deg, transparent, var(--success), transparent);
+}
+.metricCard:nth-child(4)::before {
+  background: linear-gradient(90deg, transparent, var(--accent-light), transparent);
+}
+
+.metricCard:hover {
+  border-color: var(--line-hover);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+/* ═══ PANELS ═══ */
+
+.panel {
+  animation: fadeInUp var(--duration-normal) var(--ease) 100ms both;
+}
+
+.panelHeader,
+.panelHeaderCompact {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.panelHeaderCompact {
+  margin-bottom: 16px;
+}
+
+.panelTitle,
+.assumptionTitle {
+  margin: 5px 0 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.panelTags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ═══ STRUCTURED DATA (Sections) ═══ */
+
+.sectionStack,
+.issueList {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.sectionBlock,
+.issueCard,
+.assumptionBox {
+  padding: 18px;
+}
+
+.sectionBlock:hover,
+.issueCard:hover {
+  border-color: var(--line-hover);
+}
+
+.sectionHeading {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+/* ── Data Tables ── */
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dataTable th,
+.dataTable td {
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.dataTable thead th,
+.dataTable tbody th {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: var(--font-mono), monospace;
+  font-weight: 500;
+  width: 40%;
+}
+
+.dataTable td {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.dataTable tbody tr {
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.dataTable tbody tr:hover {
+  background: var(--surface-hover);
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+/* ═══ REPORT IFRAME ═══ */
+
+.reportFrame {
+  width: 100%;
+  min-height: 980px;
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: white;
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--duration-normal) var(--ease);
+}
+
+.reportFrame:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* ═══ INFO LIST ═══ */
+
+.infoList {
+  display: grid;
+  gap: 0;
+}
+
+.infoRow {
+  display: grid;
+  gap: 4px;
+  padding: 13px 0;
+  border-top: 1px solid var(--line);
+}
+
+.infoRow dd {
+  margin: 0;
+  word-break: break-word;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ═══ ISSUES ═══ */
+
+.issueCard {
+  position: relative;
+  overflow: hidden;
+}
+
+.issueCard::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 0;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--warning);
+}
+
+.issueHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding-left: 8px;
+}
+
+.issueField {
+  font-weight: 650;
+  font-size: 0.95rem;
+}
+
+.issueCard .bodyText,
+.issueCard .note {
+  padding-left: 8px;
+}
+
+/* ── Assumptions ── */
+
+.assumptionBox {
+  margin-top: 16px;
+}
+
+.assumptionTitle {
+  font-size: 1rem;
+}
+
+.assumptionList {
+  margin: 10px 0 0 1.2rem;
+  padding: 0;
+}
+
+.assumptionList li {
+  padding: 4px 0;
+}
+
+/* ═══ EMPTY STATE ═══ */
+
+.emptyState {
+  padding: 22px;
+  border-radius: var(--radius-md);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.015);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+/* ═══ RESPONSIVE ═══ */
+
+@media (max-width: 960px) {
+  .layout,
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .metricsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sideColumn {
+    position: static;
+  }
+}
+
+@media (max-width: 760px) {
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .panelHeader,
+  .panelHeaderCompact,
+  .issueHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reportFrame {
+    min-height: 720px;
+  }
+}

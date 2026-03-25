@@ -1,0 +1,90 @@
+{
+  "config": {
+    "folder": "test-data",
+    "pattern": "IMG_084[3-6]*",
+    "limit": null,
+    "visual_engine": "auto",
+    "structured_mode": "auto",
+    "ensemble_mode": "always",
+    "ensemble_engines": "rapidocr,google-documentai,azure-document-intelligence",
+    "field_adjudication_mode": "auto"
+  },
+  "summary": {
+    "total_files": 4,
+    "processed_ok": 4,
+    "failed": 0,
+    "average_confidence": 0.9892,
+    "by_decision": {
+      "auto_accept": 4
+    },
+    "by_family": {
+      "identity": 4
+    },
+    "by_country": {
+      "CL": 4
+    },
+    "unsupported_or_review": 0
+  },
+  "results": [
+    {
+      "file": "IMG_0843.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-back-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.99,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    },
+    {
+      "file": "IMG_0844.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-back-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.987,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    },
+    {
+      "file": "IMG_0845.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-back-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.99,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    },
+    {
+      "file": "IMG_0846.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-back-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.99,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    }
+  ]
+}

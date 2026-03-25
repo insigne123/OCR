@@ -1,0 +1,79 @@
+{
+  "config": {
+    "folder": "test-data",
+    "pattern": "IMG_084*",
+    "limit": null,
+    "visual_engine": "auto",
+    "structured_mode": "auto",
+    "ensemble_mode": "always",
+    "ensemble_engines": "rapidocr,google-documentai,azure-document-intelligence",
+    "field_adjudication_mode": "auto"
+  },
+  "summary": {
+    "total_files": 3,
+    "processed_ok": 3,
+    "failed": 0,
+    "average_confidence": 0.989,
+    "by_decision": {
+      "auto_accept": 3
+    },
+    "by_family": {
+      "driver_license": 2,
+      "identity": 1
+    },
+    "by_country": {
+      "CL": 3
+    },
+    "unsupported_or_review": 0
+  },
+  "results": [
+    {
+      "file": "IMG_0840.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "driver_license",
+      "country": "CL",
+      "variant": "driver-license-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.987,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    },
+    {
+      "file": "IMG_0841.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.99,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "LOW_EVIDENCE",
+        "RULE_LOW_EVIDENCE"
+      ]
+    },
+    {
+      "file": "IMG_0842.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "driver_license",
+      "country": "CL",
+      "variant": "driver-license-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.99,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    }
+  ]
+}

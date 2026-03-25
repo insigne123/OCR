@@ -1,0 +1,216 @@
+{
+  "config": {
+    "folder": "test-data",
+    "visual_engine": "auto",
+    "structured_mode": "auto",
+    "ensemble_mode": "always",
+    "ensemble_engines": "rapidocr,google-documentai,azure-document-intelligence",
+    "field_adjudication_mode": "auto"
+  },
+  "summary": {
+    "total_files": 11,
+    "processed_ok": 11,
+    "failed": 0,
+    "average_confidence": 0.8545,
+    "by_decision": {
+      "accept_with_warning": 7,
+      "human_review": 4
+    },
+    "by_family": {
+      "identity": 11
+    },
+    "by_country": {
+      "CL": 6,
+      "CO": 2,
+      "PE": 3
+    },
+    "unsupported_or_review": 4
+  },
+  "results": [
+    {
+      "file": "enfermedades-2.png",
+      "mime_type": "image/png",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "accept_with_warning",
+      "global_confidence": 0.9,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "openai-structured",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "RULE_LOW_EVIDENCE"
+      ]
+    },
+    {
+      "file": "Image_260317_095254 (1).jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "accept_with_warning",
+      "global_confidence": 0.86,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "LOW_EVIDENCE",
+        "RULE_LOW_EVIDENCE"
+      ]
+    },
+    {
+      "file": "images (1).jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CO",
+      "variant": "identity-co-front-text",
+      "decision": "human_review",
+      "global_confidence": 0.72,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    },
+    {
+      "file": "images (2).jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "PE",
+      "variant": "identity-pe-front-text",
+      "decision": "accept_with_warning",
+      "global_confidence": 0.86,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "google-documentai",
+      "issue_types": []
+    },
+    {
+      "file": "images (3).jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "PE",
+      "variant": "identity-pe-front-text",
+      "decision": "accept_with_warning",
+      "global_confidence": 0.8500000000000001,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "google-documentai",
+      "issue_types": []
+    },
+    {
+      "file": "images.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CO",
+      "variant": "identity-co-front-text",
+      "decision": "accept_with_warning",
+      "global_confidence": 0.85,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "openai-structured",
+      "extraction_source": "azure-document-intelligence",
+      "issue_types": []
+    },
+    {
+      "file": "J7QQH5D6QNHUTHFA5HGW2WX3WQ.avif",
+      "mime_type": "image/avif",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "human_review",
+      "global_confidence": 0.85,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "openai-structured",
+      "extraction_source": "google-documentai",
+      "issue_types": [
+        "RULE_REQUIRED_FIELD",
+        "RULE_LOW_EVIDENCE",
+        "RULE_REQUIRED_FIELD"
+      ]
+    },
+    {
+      "file": "maxresdefault.jpg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "human_review",
+      "global_confidence": 0.9,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "openai-structured",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "RULE_REQUIRED_FIELD",
+        "RULE_LOW_EVIDENCE",
+        "RULE_REQUIRED_FIELD"
+      ]
+    },
+    {
+      "file": "QLL3EDE2CZC6LA6NFO4EL5RSLY.avif",
+      "mime_type": "image/avif",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "accept_with_warning",
+      "global_confidence": 0.9,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "openai-structured",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "RULE_LOW_EVIDENCE"
+      ]
+    },
+    {
+      "file": "QVVVNMMQTJB5NKY7J6QMDIHHME.png",
+      "mime_type": "image/png",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "PE",
+      "variant": "identity-pe-front-text",
+      "decision": "accept_with_warning",
+      "global_confidence": 0.86,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    },
+    {
+      "file": "QXT6KJA7FNDR5PPJ2X37AULRDU.avif",
+      "mime_type": "image/avif",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "human_review",
+      "global_confidence": 0.85,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "openai-structured",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "typo",
+        "format",
+        "RULE_LOW_EVIDENCE",
+        "RULE_REQUIRED_FIELD"
+      ]
+    }
+  ]
+}

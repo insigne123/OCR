@@ -1,0 +1,126 @@
+{
+  "config": {
+    "folder": "test-data",
+    "pattern": "IMG_083*",
+    "limit": null,
+    "visual_engine": "auto",
+    "structured_mode": "auto",
+    "ensemble_mode": "always",
+    "ensemble_engines": "rapidocr,google-documentai,azure-document-intelligence",
+    "field_adjudication_mode": "auto"
+  },
+  "summary": {
+    "total_files": 6,
+    "processed_ok": 6,
+    "failed": 0,
+    "average_confidence": 0.9178,
+    "by_decision": {
+      "auto_accept": 5,
+      "human_review": 1
+    },
+    "by_family": {
+      "driver_license": 6
+    },
+    "by_country": {
+      "CL": 5,
+      "XX": 1
+    },
+    "unsupported_or_review": 1
+  },
+  "results": [
+    {
+      "file": "IMG_0835(1).JPG",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "driver_license",
+      "country": "CL",
+      "variant": "driver-license-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.99,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    },
+    {
+      "file": "IMG_0835.JPG",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "driver_license",
+      "country": "CL",
+      "variant": "driver-license-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.99,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    },
+    {
+      "file": "IMG_0836.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "driver_license",
+      "country": "CL",
+      "variant": "driver-license-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.957,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    },
+    {
+      "file": "IMG_0837.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "driver_license",
+      "country": "XX",
+      "variant": "driver-license-text",
+      "decision": "human_review",
+      "global_confidence": 0.59,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "MISSING_FIELD",
+        "MISSING_FIELD",
+        "RULE_REQUIRED_FIELD"
+      ]
+    },
+    {
+      "file": "IMG_0838.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "driver_license",
+      "country": "CL",
+      "variant": "driver-license-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.99,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    },
+    {
+      "file": "IMG_0839.jpeg",
+      "mime_type": "image/jpeg",
+      "status": "ok",
+      "document_family": "driver_license",
+      "country": "CL",
+      "variant": "driver-license-text",
+      "decision": "auto_accept",
+      "global_confidence": 0.99,
+      "review_required": false,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": []
+    }
+  ]
+}

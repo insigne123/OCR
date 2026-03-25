@@ -1,0 +1,5 @@
+file,mime_type,status,document_family,country,variant,decision,global_confidence,review_required,page_count,processing_engine,extraction_source,issue_types,error
+IMG_0843.jpeg,image/jpeg,ok,passport,XX,passport-text,human_review,0.34,True,1,unsupported-document,rapidocr-local,UNSUPPORTED_DOCUMENT,
+IMG_0844.jpeg,image/jpeg,ok,passport,XX,passport-text,human_review,0.34,True,1,unsupported-document,azure-document-intelligence,UNSUPPORTED_DOCUMENT,
+IMG_0845.jpeg,image/jpeg,ok,passport,XX,passport-text,human_review,0.34,True,1,unsupported-document,rapidocr-local,UNSUPPORTED_DOCUMENT,
+IMG_0846.jpeg,image/jpeg,ok,passport,XX,passport-text,human_review,0.34,True,1,unsupported-document,rapidocr-local,UNSUPPORTED_DOCUMENT,

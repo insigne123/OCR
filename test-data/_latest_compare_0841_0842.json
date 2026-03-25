@@ -1,0 +1,154 @@
+{
+  "reports": [
+    {
+      "image": "IMG_0841.jpeg",
+      "reference": "test-data/response_IMG_0841.jpeg.json",
+      "document_family": "identity",
+      "decision": "auto_accept",
+      "global_confidence": 0.99,
+      "summary": {
+        "matches": 10,
+        "mismatches": 0,
+        "missing": 0
+      },
+      "table_comparisons": {},
+      "comparisons": [
+        {
+          "field": "document_number",
+          "status": "match",
+          "expected": "B64.872.150",
+          "actual": "B64.872.150"
+        },
+        {
+          "field": "first_name",
+          "status": "match",
+          "expected": "NICOLAS FAELLES",
+          "actual": "NICOLAS FAELLES"
+        },
+        {
+          "field": "last_name",
+          "status": "match",
+          "expected": "YARUR GÓNGORA",
+          "actual": "YARUR GONGORA"
+        },
+        {
+          "field": "holder_name",
+          "status": "match",
+          "expected": "NICOLAS FAELLES YARUR GÓNGORA",
+          "actual": "NICOLAS FAELLES YARUR GONGORA"
+        },
+        {
+          "field": "expiry_date",
+          "status": "match",
+          "expected": "2035-10-13",
+          "actual": "2035-10-13"
+        },
+        {
+          "field": "issued_date",
+          "status": "match",
+          "expected": "2025-12-02",
+          "actual": "2025-12-02"
+        },
+        {
+          "field": "issuing_authority",
+          "status": "match",
+          "expected": "SERVICIO DE REGISTRO CIVIL E IDENTIFICACIÓN",
+          "actual": "SERVICIO DE REGISTRO CIVIL E IDENTIFICACION"
+        },
+        {
+          "field": "birth_date",
+          "status": "match",
+          "expected": "2005-10-13",
+          "actual": "2005-10-13"
+        },
+        {
+          "field": "sex",
+          "status": "match",
+          "expected": "M",
+          "actual": "M"
+        },
+        {
+          "field": "nationality",
+          "status": "match",
+          "expected": "CHILENA",
+          "actual": "CHILENA"
+        }
+      ]
+    },
+    {
+      "image": "IMG_0842.jpeg",
+      "reference": "test-data/response_IMG_0842.jpeg.json",
+      "document_family": "driver_license",
+      "decision": "auto_accept",
+      "global_confidence": 0.99,
+      "summary": {
+        "matches": 9,
+        "mismatches": 0,
+        "missing": 0
+      },
+      "table_comparisons": {},
+      "comparisons": [
+        {
+          "field": "document_number",
+          "status": "match",
+          "expected": "21.952.550-8",
+          "actual": "21.952.550-8"
+        },
+        {
+          "field": "first_name",
+          "status": "match",
+          "expected": "NICOLAS",
+          "actual": "NICOLAS"
+        },
+        {
+          "field": "last_name",
+          "status": "match",
+          "expected": "FAELLES YARUR GONGORA",
+          "actual": "FAELLES YARUR GONGORA"
+        },
+        {
+          "field": "holder_name",
+          "status": "match",
+          "expected": "NICOLAS FAELLES YARUR GONGORA",
+          "actual": "NICOLAS FAELLES YARUR GONGORA"
+        },
+        {
+          "field": "category",
+          "status": "match",
+          "expected": "B",
+          "actual": "B"
+        },
+        {
+          "field": "expiry_date",
+          "status": "match",
+          "expected": "2030-10-13",
+          "actual": "2030-10-13"
+        },
+        {
+          "field": "issued_date",
+          "status": "extra",
+          "expected": null,
+          "actual": "2024-08-29"
+        },
+        {
+          "field": "issuing_authority",
+          "status": "match",
+          "expected": "LA REINA",
+          "actual": "LA REINA"
+        },
+        {
+          "field": "address",
+          "status": "match",
+          "expected": "ALVARO CASANOVA 0360 CASA J",
+          "actual": "ALVARO CASANOVA 0360 CASA J"
+        },
+        {
+          "field": "nationality",
+          "status": "match",
+          "expected": "CHILE",
+          "actual": "CHILE"
+        }
+      ]
+    }
+  ]
+}

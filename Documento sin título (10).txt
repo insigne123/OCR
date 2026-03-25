@@ -1,0 +1,265 @@
+﻿Te propongo este informe de creación como si ya estuviéramos definiendo el producto que va a salir a producción.
+1. Qué producto estamos construyendo
+No construiría “un OCR perfecto”. Construiría una plataforma de Intelligent Document Processing: recibe documentos complejos, los limpia, los separa, los clasifica, extrae campos, normaliza valores, valida consistencia y envía a revisión humana solo lo dudoso. Esa es la forma realista de llegar a calidad productiva, porque los principales proveedores trabajan con confidence scores, métricas de evaluación y revisión humana, no con una promesa de exactitud universal. (Microsoft Learn)
+2. Decisión de arquitectura
+Si tuviera que cerrarlo hoy, haría esto:
+Modo principal SaaS
+* preprocesado self-hosted
+* extracción documental en la nube
+* normalización e interpretación con LLM estructurado
+* revisión humana propia
+Modo enterprise/private
+* misma aplicación
+* mismo backend
+* mismo modelo de datos
+* pero con engine intercambiable para correr extracción en entorno privado
+La razón es práctica: Google Document AI hoy tiene un stack muy fuerte para split/classify, invoice parsing, uptraining, normalized values, evaluation metrics y selección regional de procesamiento; OpenAI permite trabajar con image inputs y devolver JSON validado por schema; y Azure aporta una ventaja fuerte para despliegues privados porque Document Intelligence puede correr en containers, aunque la cobertura de modelos en containers depende de la versión. (Google Cloud Documentation)
+Mi recomendación final sería:
+* Producto GA inicial: Google Document AI + OpenAI + preprocesado self-hosted
+* Variante enterprise/regulada: mismo producto, pero con adapter para Azure Document Intelligence containers
+3. La verdad incómoda sobre DNI y licencias
+Para facturas, los parsers preentrenados sí ayudan mucho. Para DNI, licencias de conducir y documentos de identidad de muchos países, no confiaría el producto a un parser prebuilt único. Azure documenta su modelo de identidad para licencias de conducir de EE.UU. y páginas biográficas de pasaportes internacionales; Google documenta parsers como US passport, US driver license e Identity Document Proofing; AWS indica que AnalyzeID cubre US driver’s licenses y US passports. Eso significa que para DNI/licencias de LatAm, Europa y variantes locales, el camino correcto es un custom extractor por familia documental y por país. (Microsoft Learn)
+4. Stack final recomendado
+Capa de aplicación
+* Frontend: Next.js + React + TypeScript
+* Backend API: Python + FastAPI
+* Autenticación: OIDC/SAML + RBAC por tenant
+* Workflow orchestration: Temporal
+* Queue/eventing: Kafka
+* Metadata DB: PostgreSQL
+* Cache/locks: Redis
+* Object storage: S3-compatible
+* Search/audit index: OpenSearch
+* Compute: Kubernetes con pools CPU y GPU
+* Observabilidad: OpenTelemetry + Prometheus + Grafana + Loki + Sentry
+* Infra: Terraform + ArgoCD + GitHub Actions
+Capa OCR/IA
+* Preproceso visual: PaddleOCR Document Preprocessing
+* OCR fallback / rotated docs: docTR
+* Splitter / classifier principal: Google Document AI Custom Splitter
+* Facturas: Google Invoice Parser uptrained
+* DNI/licencias/pasaportes: Google Custom Extractor por país/familia
+* Interpretación/normalización final: OpenAI Responses API + Structured Outputs
+* Modo privado enterprise: Azure Document Intelligence containers + classifier custom incremental
+5. Por qué estas herramientas
+PaddleOCR te resuelve orientación y corrección geométrica antes del OCR; docTR es muy útil como OCR fallback y para documentos con cajas rotadas. (paddleocr.ai)
+Google Custom Splitter hoy es una pieza clave para PDFs mezclados: puede separar documentos lógicos dentro de un archivo compuesto, usar confidence para decidir bypass o revisión, y su versión preentrenada reciente soporta un modo de splitting/clasificación más rápido de llevar a producción. Además, Google tiene Invoice Parser uptraining, normalized values y precision/recall para evaluación. (Google Cloud Documentation)
+OpenAI lo usaría no como OCR primario, sino como capa de interpretación controlada: recibe imágenes o resultados OCR, y devuelve JSON validado contra JSON Schema usando Structured Outputs en modo estricto. Eso evita respuestas libres y te obliga a recibir datos programáticamente consistentes. (OpenAI Developers)
+Azure lo dejaría como adapter enterprise, porque Document Intelligence soporta custom classifier con incremental training y tiene opción de containers. El detalle importante es que en containers la cobertura cambia: en v4.0 están Read/Layout, mientras que en v3.1 están Read/Layout/ID Document/Receipt/Invoice. Para una instalación privada seria, ese matiz importa mucho. (Microsoft Learn)
+6. Arquitectura del flujo de procesamiento
+La arquitectura de ejecución debería verse así:
+Cliente
+  -> API Gateway
+  -> Upload Service
+  -> Object Storage
+  -> Job Orchestrator
+  -> Preprocess Worker
+  -> Split/Classify Worker
+  -> Extractor Worker
+  -> LLM Normalizer
+  -> Rule Engine
+  -> Decision Engine
+  -> Review Console
+  -> Export/Webhook/API
+Pipeline exacto
+1. Upload
+   * PDF, JPG, PNG, TIFF, HEIF
+   * generar document_id, tenant_id, hash SHA-256
+   * escaneo antivirus
+   * almacenamiento cifrado
+2. Document rendering
+   * si llega PDF, render por página
+   * conservar original y páginas derivadas
+   * detectar si el PDF ya trae texto embebido
+3. Quality scoring
+   * blur score
+   * glare score
+   * crop/page-cut detection
+   * resolución mínima
+   * orientación estimada
+4. Preproceso
+   * deskew
+   * orientation correction
+   * dewarp/unwarp
+   * contraste
+   * denoise
+   * page boundary detection
+5. Split / classify
+   * detectar si el archivo trae una factura, varias facturas, DNI frente/dorso, licencia, etc.
+   * asignar document_family, country, variant, risk_level
+6. Extracción
+   * factura: extractor especializado
+   * identidad: extractor custom por familia y país
+   * fallback: layout + OCR general si no hay extractor específico
+7. Ensemble / consensus
+   * para documentos críticos, correr dos rutas en paralelo:
+      * parser especializado
+      * OCR/layout general
+   * si ambos coinciden, sube la confianza operativa
+   * si divergen, baja confianza y pasa a revisión
+8. Interpretación con IA
+   * el LLM no “adivina” datos
+   * convierte salida cruda en JSON canónico
+   * normaliza moneda, fechas, nombres, números de documento
+   * marca campos inferidos o ambiguos
+   * genera warnings semánticos
+9. Validación determinística
+   * factura: sumatoria ítems = total, impuestos, moneda, fecha, CUIT/RUT/NIF, duplicados
+   * identidad: vencimiento > emisión, formato de número, MRZ si existe, nombre coherente, frente/dorso coherentes
+   * reglas por país y por documento
+10. Decision engine
+* autoaceptar
+* aceptar con warning
+* enviar a revisión
+* rechazar por calidad/fraude/formato
+11. Review humana
+* UI con imagen, bbox, texto crudo, valor normalizado, confianza, motivo de duda
+* guardar corrección y motivo
+* todo con auditoría
+12. Export
+* JSON
+* webhook
+* API pull
+* CSV
+* integración ERP/CRM/KYC
+13. Learning loop
+* correcciones humanas vuelven al dataset
+* reentrenamiento por lote
+* recalibración de umbrales
+* pruebas de regresión
+7. Técnicas que sí usaría
+a) Preprocesado visual serio
+No mandaría fotos “como vienen”. La mejora previa es parte del producto. PaddleOCR documenta orientación y corrección geométrica como parte de su pipeline; eso debe vivir en tu propia capa de preprocesado. (paddleocr.ai)
+b) Extracción por familia documental
+No un modelo para todo. Haría:
+* familia facturas
+* familia identidad
+* familia licencias
+* familia comprobantes
+* familia contratos
+* familia “otros”
+c) Country packs
+Para identidad, crearía packs por país:
+* AR: DNI frente/dorso, cédulas, licencias locales
+* CL: cédula, licencias
+* MX: INE, licencias
+* ES: DNI/NIE, permisos
+* etc.
+Cada pack tendría:
+* clasificador
+* extractor
+* reglas
+* validadores
+* ejemplos etiquetados
+* tests
+d) Provenance obligatorio
+Cada campo debe guardar:
+* raw_text
+* normalized_value
+* confidence
+* engine
+* page
+* bbox
+* evidence_span
+* validation_status
+* review_status
+Nunca guardes solo “el valor final”. Guarda también de dónde salió.
+e) LLM restringido
+El LLM debe operar con contrato estricto. OpenAI hoy soporta image inputs y Structured Outputs con JSON Schema, así que la IA puede estar encajonada dentro de una salida verificable. (OpenAI Developers)
+f) Confidence calibration
+Azure, Google y AWS insisten en confidence y evaluación; tu producto debe tener umbrales por campo y por flujo, no un único score global. (Microsoft Learn)
+8. Estrategia documental concreta
+Facturas
+Usaría Google Invoice Parser uptrained como extractor principal. La documentación actual indica que puedes partir de un parser preentrenado, mejorarlo con tus datos y agregar campos custom, lo cual es ideal para proveedores, formatos y países distintos. (Google Cloud Documentation)
+DNI / licencias / identidad
+Usaría Custom Extractor. Google documenta este camino justamente para tipos documentales donde no hay prebuilt adecuado, combinando modelos layout-aware y template-based. Además, Google ya expone guidance sobre cuántos documentos pueden servir según el modo de entrenamiento, pero para un producto serio yo tomaría esos mínimos como punto de partida, no como objetivo final. (Google Cloud Documentation)
+PDFs mixtos o lotes
+Usaría Custom Splitter para separar páginas y rutear a extractores específicos. Google documenta incluso el patrón de rutear según clase y decidir bypass/revisión con confidence. (Google Cloud Documentation)
+9. Dataset y entrenamiento
+No confundas “mínimo para entrenar” con “listo para producción”. Azure dice que puedes empezar con cinco ejemplos para un custom extraction model; Google muestra números de arranque bastante bajos según el modo. Eso sirve para probar. Para producción, yo armaría datasets amplios por variante, con suficiente diversidad de cámara, escaneo, plantillas, deterioro, iluminación y compresión. (Microsoft Learn)
+Proceso correcto:
+* dataset de entrenamiento
+* dataset de test bloqueado
+* golden set de regresión
+* etiquetado doble para campos críticos
+* revisión de desacuerdos
+* versionado de datasets
+* versionado de modelos
+* evaluación por campo, no solo por documento
+10. Revisión humana
+La revisión humana no es un parche; es un módulo central del producto. Google ofrece flujos de human review y además advierte que, para Identity Proofing, no debe usarse como herramienta de decisión automática y debe haber un humano en el loop. Yo haría tu propia consola de revisión como sistema de registro, aunque por debajo puedas consumir señales de proveedores. (Google Cloud Documentation)
+La consola debe mostrar:
+* imagen original
+* cajas/bounding boxes
+* OCR crudo
+* valor normalizado
+* score por campo
+* regla que falló
+* sugerencia IA
+* historial de cambios
+* auditoría de quién corrigió qué
+11. Seguridad y compliance
+Como vas a tocar identidad y documentos sensibles, diseñaría esto como producto PII-first:
+* cifrado en tránsito y reposo
+* claves por tenant
+* signed URLs de corta vida
+* nada de documentos completos en logs
+* redacción de PII en métricas y errores
+* auditoría inmutable
+* políticas de retención por cliente
+* soft delete + legal hold
+* aislamiento por tenant
+* trazabilidad completa por modelo y versión
+En GCP, Document AI obliga a elegir ubicación regional o multirregional para almacenamiento y procesamiento; además, en flujos custom se puede usar storage propio con CMEK. En Azure, Document Intelligence puede correr en tu propio entorno con containers, lo cual es especialmente útil para clientes con restricciones fuertes de gobernanza. (Google Cloud Documentation)
+12. Observabilidad y operación
+En producción vas a necesitar paneles para:
+* tasa de autoaprobación
+* tasa de revisión
+* precisión por campo
+* recall por campo
+* falsos positivos por documento
+* drift por país/proveedor
+* latencia por etapa
+* fallos por engine
+* documentos rechazados por mala calidad
+* top reglas que disparan revisión
+Google documenta evaluación con precision/recall; AWS expone precision/recall/F1 para adapters; Azure explica cómo interpretar confidence y usarlo para decidir aceptación automática o revisión. Ese debe ser tu marco operativo. (Google Cloud Documentation)
+13. Qué no haría
+* no pondría un solo OCR para todos los documentos
+* no dejaría al LLM escribir valores sin evidencia
+* no autoaprobaría identidad solo por una señal antifraude
+* no almacenaría solo el resultado final sin provenance
+* no entrenaría un modelo global de identidad “para todos los países” en la primera versión
+* no dependería del HITL de un proveedor como core del producto
+14. Definición de “listo para producción”
+Para mí, este producto está listo para producción cuando cumple esto:
+* API asíncrona con job_id
+* reintentos e idempotencia
+* DLQ para trabajos fallidos
+* trazabilidad por documento/campo/modelo
+* revisión humana integrada
+* pruebas de regresión por golden set
+* versionado de reglas y modelos
+* multi-tenant
+* RBAC y auditoría
+* observabilidad por campo
+* despliegue blue/green o canary
+* engine abstraction para cambiar proveedor sin reescribir la app
+15. Mi propuesta final, cerrada
+Producto final recomendado:
+* app web en Next.js
+* backend en FastAPI
+* workflows con Temporal
+* almacenamiento objeto + PostgreSQL + Redis + OpenSearch
+* ejecución en Kubernetes
+* preprocesado visual con PaddleOCR
+* OCR fallback con docTR
+* split/classify con Google Document AI
+* facturas con Invoice Parser uptrained
+* DNI/licencias con Custom Extractor por país/familia
+* interpretación final con OpenAI Structured Outputs
+* motor de reglas propio
+* review console propia
+* adapter enterprise para Azure containers
+Ese diseño te da tres cosas a la vez: potencia, control y evolución. No depende de una sola tecnología, no se rompe cuando aparece un documento nuevo y te deja crecer hacia clientes con requisitos duros de privacidad.
+El siguiente paso útil sería convertir esto en un PRD técnico completo, con módulos, endpoints, esquema JSON por documento y backlog de desarrollo.

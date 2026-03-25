@@ -1,0 +1,18 @@
+{
+  "dataset": "demo-latam",
+  "documents": 24,
+  "families": [
+    "driver_license",
+    "identity",
+    "passport"
+  ],
+  "countries": [
+    "CHL",
+    "CL",
+    "CO",
+    "COL",
+    "PE",
+    "PER"
+  ],
+  "manifest": "synthetic-data/demo-latam/manifest.jsonl"
+}

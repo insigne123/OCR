@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yago SpA - Brochure Comercial</title>
+  <style>
+    :root {
+      --primary: #0f172a;
+      --secondary: #0ea5e9;
+      --accent: #38bdf8;
+      --darkbg: #122033;
+      --darkbg-2: #1d3046;
+      --soft: #f3f9fd;
+      --soft-2: #e7f3fb;
+      --line: #d6e5f1;
+      --muted: #4a6076;
+      --ink: #102033;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      color: var(--ink);
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(14, 165, 233, 0.18), transparent 24%),
+        linear-gradient(180deg, #e9f4fb 0%, #d9ecf9 100%);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      margin: 0;
+      padding: 8mm 0;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+      margin: 0;
+    }
+
+    .page {
+      width: 297mm;
+      min-height: 210mm;
+      margin: 0 auto;
+      padding: 6mm;
+      overflow: hidden;
+      border-radius: 7mm;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(242, 249, 255, 0.96)),
+        linear-gradient(135deg, rgba(56, 189, 248, 0.08), transparent 50%);
+      box-shadow: 0 34px 80px rgba(15, 23, 42, 0.18);
+      position: relative;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+      background-size: 18mm 18mm;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 22%, transparent 78%, rgba(0, 0, 0, 0.12));
+      pointer-events: none;
+    }
+
+    .layout {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.06fr 1.12fr 0.9fr;
+      grid-template-rows: 60mm 64mm 68mm;
+      grid-template-areas:
+        "hero hero focus"
+        "about services focus"
+        "projects projects contact";
+      gap: 3mm;
+      height: calc(210mm - 12mm);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 5mm;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.07);
+      overflow: hidden;
+    }
+
+    .hero,
+    .focus,
+    .about,
+    .services,
+    .projects,
+    .contact {
+      min-height: 0;
+    }
+
+    .hero {
+      grid-area: hero;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3mm;
+      padding: 4.4mm;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(232, 244, 252, 0.95));
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 2.4mm;
+      min-width: 0;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 4mm;
+      margin-bottom: 2.5mm;
+    }
+
+    .logo-wrap {
+      width: 18mm;
+      height: 18mm;
+      border-radius: 4mm;
+      background: #0f172a;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.2);
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.6mm;
+      padding: 1.3mm 3mm;
+      border-radius: 999px;
+      background: rgba(14, 165, 233, 0.12);
+      color: #0369a1;
+      font-size: 8.7pt;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 2mm;
+      height: 2mm;
+      border-radius: 50%;
+      background: var(--secondary);
+      display: inline-block;
+    }
+
+    .brand-name {
+      display: block;
+      margin-top: 1mm;
+      color: var(--muted);
+      font-size: 10pt;
+      font-weight: 700;
+    }
+
+    .hero h1,
+    .card h2,
+    .card h3 {
+      font-family: "Bahnschrift", "Arial Narrow", sans-serif;
+      letter-spacing: -0.03em;
+    }
+
+    .hero h1 {
+      max-width: 122mm;
+      font-size: 23.4pt;
+      line-height: 0.98;
+      color: var(--primary);
+      margin-bottom: 2.6mm;
+    }
+
+    .hero p {
+      max-width: 118mm;
+      color: var(--muted);
+      font-size: 8.9pt;
+      line-height: 1.34;
+    }
+
+    .hero-summary {
+      padding: 3mm;
+      border-radius: 4mm;
+      background: linear-gradient(180deg, #ffffff 0%, #f4fbff 100%);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      display: grid;
+      gap: 2.2mm;
+      align-content: start;
+    }
+
+    .hero-summary h3 {
+      font-size: 14pt;
+      line-height: 1;
+      color: var(--primary);
+      margin-bottom: 0.8mm;
+    }
+
+    .hero-summary p {
+      font-size: 8.1pt;
+      line-height: 1.28;
+      color: var(--muted);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.8mm;
+      margin-top: 2.5mm;
+    }
+
+    .pill,
+    .sector,
+    .partner {
+      display: inline-flex;
+      align-items: center;
+      padding: 1.4mm 2.7mm;
+      border-radius: 999px;
+      font-size: 8.1pt;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .pill {
+      background: #ffffff;
+      color: var(--primary);
+      border: 1px solid rgba(14, 165, 233, 0.16);
+    }
+
+    .focus {
+      grid-area: focus;
+      padding: 4.3mm;
+      color: #ebf6ff;
+      background:
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.24), transparent 28%),
+        linear-gradient(180deg, var(--darkbg-2) 0%, var(--darkbg) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 3.2mm;
+    }
+
+    .focus .eyebrow {
+      background: rgba(255, 255, 255, 0.08);
+      color: #d9efff;
+    }
+
+    .focus h2 {
+      font-size: 18pt;
+      line-height: 1.02;
+      color: #ffffff;
+      max-width: 54mm;
+    }
+
+    .focus > p {
+      color: #c7d8e8;
+      font-size: 8.5pt;
+      line-height: 1.34;
+    }
+
+    .focus-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8mm;
+      align-content: stretch;
+    }
+
+    .focus-item {
+      padding: 2.4mm;
+      border-radius: 3.5mm;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(191, 233, 255, 0.1);
+    }
+
+    .focus-item strong {
+      display: block;
+      margin-bottom: 1mm;
+      font-size: 8.8pt;
+      color: #ffffff;
+    }
+
+    .focus-item span {
+      display: block;
+      font-size: 7.3pt;
+      line-height: 1.28;
+      color: #c7d8e8;
+    }
+
+    .about {
+      grid-area: about;
+      padding: 4mm;
+    }
+
+    .services {
+      grid-area: services;
+      padding: 4mm;
+    }
+
+    .projects {
+      grid-area: projects;
+      padding: 4mm;
+    }
+
+    .contact {
+      grid-area: contact;
+      padding: 4mm;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 2.4mm;
+    }
+
+    .about h2,
+    .services h2,
+    .projects h2,
+    .contact h2 {
+      font-size: 16.5pt;
+      line-height: 1;
+      color: var(--primary);
+      margin-bottom: 1.6mm;
+    }
+
+    .intro-copy,
+    .section-copy,
+    .contact-copy {
+      font-size: 8.3pt;
+      line-height: 1.3;
+      color: var(--muted);
+    }
+
+    .quote {
+      margin-top: 2.6mm;
+      padding: 2.8mm 3mm;
+      border-left: 3px solid var(--secondary);
+      border-radius: 0 3mm 3mm 0;
+      background: rgba(14, 165, 233, 0.08);
+      font-size: 8pt;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .mini-title {
+      margin-top: 2mm;
+      margin-bottom: 1.2mm;
+      font-size: 10.4pt;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .check-list,
+    .diff-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 1.4mm;
+    }
+
+    .check-list li,
+    .diff-list li {
+      position: relative;
+      padding-left: 4.4mm;
+      font-size: 7.4pt;
+      line-height: 1.25;
+      color: var(--muted);
+    }
+
+    .check-list li::before,
+    .diff-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.64em;
+      width: 2.4mm;
+      height: 2.4mm;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      transform: translateY(-50%);
+      box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.12);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2mm;
+      margin-top: 2.6mm;
+    }
+
+    .services-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.4mm 1.6mm;
+      margin-top: 2.4mm;
+    }
+
+    .service-line {
+      display: grid;
+      grid-template-columns: 6mm 1fr;
+      gap: 1.4mm;
+      padding: 1.8mm;
+      border-radius: 3.2mm;
+      background: linear-gradient(180deg, #ffffff 0%, #f5fbff 100%);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      align-content: start;
+    }
+
+    .service-line small {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 5.2mm;
+      height: 5.2mm;
+      border-radius: 1.5mm;
+      background: rgba(14, 165, 233, 0.1);
+      color: #0284c7;
+      font-size: 7pt;
+      font-weight: 800;
+      margin-top: 0.3mm;
+    }
+
+    .service-line h4 {
+      font-size: 7.8pt;
+      line-height: 1.14;
+      color: var(--primary);
+      margin-bottom: 0.6mm;
+    }
+
+    .service-line p {
+      font-size: 6.4pt;
+      line-height: 1.26;
+      color: var(--muted);
+    }
+
+    .service {
+      min-height: 18mm;
+      padding: 2.4mm;
+      border-radius: 3.5mm;
+      background: linear-gradient(180deg, #ffffff 0%, #f5fbff 100%);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      position: relative;
+    }
+
+    .service::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 1.1mm;
+      background: linear-gradient(90deg, var(--secondary), var(--accent));
+    }
+
+    .service small {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 5.6mm;
+      height: 5.6mm;
+      margin-bottom: 1.3mm;
+      border-radius: 1.6mm;
+      background: rgba(14, 165, 233, 0.1);
+      color: #0284c7;
+      font-size: 7.2pt;
+      font-weight: 800;
+    }
+
+    .service h4 {
+      font-size: 8pt;
+      line-height: 1.14;
+      color: var(--primary);
+      margin-bottom: 1mm;
+    }
+
+    .service p {
+      font-size: 6.5pt;
+      line-height: 1.28;
+      color: var(--muted);
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2mm;
+      margin-top: 2.4mm;
+    }
+
+    .project {
+      padding: 2.6mm;
+      border-radius: 3.8mm;
+      background: linear-gradient(180deg, #16314b 0%, #0f172a 100%);
+      color: #edf7ff;
+      border: 1px solid rgba(56, 189, 248, 0.12);
+    }
+
+    .project small {
+      display: inline-block;
+      margin-bottom: 1mm;
+      padding: 1mm 2mm;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      color: #bdeaff;
+      font-size: 7pt;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .project h4 {
+      font-size: 9.2pt;
+      line-height: 1.14;
+      margin-bottom: 1mm;
+      color: #ffffff;
+    }
+
+    .project p {
+      font-size: 7.1pt;
+      line-height: 1.28;
+      color: #d4e2ee;
+    }
+
+    .cred-row {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 2mm;
+      margin-top: 2.4mm;
+    }
+
+    .cred-box {
+      padding: 2.4mm 2.8mm;
+      border-radius: 3.8mm;
+      background: #ffffff;
+      border: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    .cred-box h3 {
+      font-size: 10.6pt;
+      line-height: 1.06;
+      color: var(--primary);
+      margin-bottom: 1.2mm;
+    }
+
+    .cred-box p {
+      font-size: 7.4pt;
+      line-height: 1.28;
+      color: var(--muted);
+    }
+
+    .partner-row,
+    .sector-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.6mm;
+      margin-top: 1.8mm;
+    }
+
+    .partner {
+      background: #eff8ff;
+      color: #0c4a6e;
+      border: 1px solid rgba(14, 165, 233, 0.16);
+    }
+
+    .diff-panel {
+      padding: 2.6mm;
+      border-radius: 3.8mm;
+      background: linear-gradient(180deg, #162638 0%, #101a28 100%);
+      border: 1px solid rgba(56, 189, 248, 0.14);
+    }
+
+    .diff-panel h3 {
+      font-size: 10.8pt;
+      line-height: 1.04;
+      color: #ffffff;
+      margin-bottom: 1.2mm;
+    }
+
+    .diff-panel p,
+    .diff-panel li {
+      color: #c8d9e7;
+    }
+
+    .sector {
+      background: #ffffff;
+      color: var(--primary);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .cta {
+      padding: 2.6mm;
+      border-radius: 3.8mm;
+      background: linear-gradient(180deg, #f4fbff 0%, #e8f3fb 100%);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .cta strong {
+      display: block;
+      margin-bottom: 1mm;
+      font-size: 9pt;
+      color: var(--primary);
+    }
+
+    .cta p {
+      font-size: 7.4pt;
+      line-height: 1.28;
+      color: var(--muted);
+    }
+
+    .cta a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1.8mm;
+      padding: 1.8mm 3mm;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 8.2pt;
+      font-weight: 800;
+      box-shadow: 0 10px 22px rgba(14, 165, 233, 0.22);
+    }
+
+    .contact-compact {
+      padding: 2mm;
+      border-radius: 3.6mm;
+      background: linear-gradient(180deg, #f4fbff 0%, #e8f3fb 100%);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      font-size: 6.8pt;
+      line-height: 1.2;
+      color: var(--primary);
+    }
+
+    .contact-compact strong {
+      display: block;
+      margin-bottom: 0.8mm;
+      font-size: 7.8pt;
+      color: var(--primary);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.4mm;
+    }
+
+    .contact-item {
+      padding: 2.2mm 2.6mm;
+      border-radius: 3.4mm;
+      background: #ffffff;
+      border: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    .contact-item span {
+      display: block;
+      margin-bottom: 0.7mm;
+      color: #0284c7;
+      font-size: 6.8pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .contact-item a,
+    .contact-item p {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 7.3pt;
+      line-height: 1.26;
+      word-break: break-word;
+    }
+
+    .foot {
+      margin-top: auto;
+      font-size: 7.2pt;
+      line-height: 1.25;
+      color: var(--muted);
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+
+    @media print {
+      html,
+      body {
+        background: #ffffff;
+      }
+
+      body {
+        padding: 0;
+      }
+
+      .page {
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="layout">
+      <section class="hero card">
+        <div class="hero-copy">
+          <div>
+            <div class="brand-row">
+              <div class="logo-wrap">
+                <img src="../Logo%20YAGO%20%282%29.jpg" alt="Logo Yago">
+              </div>
+              <div>
+                <div class="eyebrow">Automatización inteligente</div>
+                <span class="brand-name">Yago SpA</span>
+              </div>
+            </div>
+
+            <h1>IA y automatización pensadas para mejorar la operación real.</h1>
+            <p>Diseñamos e implementamos soluciones a medida para empresas que necesitan reducir fricción operativa, acelerar tareas críticas y transformar procesos complejos en sistemas más eficientes.</p>
+          </div>
+
+          <div class="pill-row">
+            <span class="pill">Automatización de procesos</span>
+            <span class="pill">Herramientas a medida</span>
+            <span class="pill">Integración de IA</span>
+            <span class="pill">Mejora continua</span>
+          </div>
+        </div>
+
+        <div class="hero-summary">
+          <div>
+            <h3>Qué hacemos</h3>
+            <p>Aplicamos tecnología donde genera utilidad real: operación, documentación, análisis, trazabilidad e integración con los sistemas del negocio.</p>
+          </div>
+          <div>
+            <h3>Cómo lo abordamos</h3>
+            <p>Trabajamos como socio de implementación, iterando sobre el uso real para ajustar y mejorar cada solución con el tiempo.</p>
+          </div>
+          <div>
+            <h3>Qué logramos</h3>
+            <p>Menos carga manual, más velocidad operativa y mejor acceso a la información.</p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="focus card">
+        <div class="eyebrow">IA aplicada</div>
+        <div>
+          <h2>Soluciones alineadas con procesos empresariales</h2>
+          <p>No implementamos software genérico. Construimos capacidades tecnológicas conectadas con la operación, los objetivos y la evolución de cada organización.</p>
+        </div>
+        <div class="focus-grid">
+          <div class="focus-item">
+            <strong>Diseño operativo</strong>
+            <span>Mapeamos flujos, cuellos de botella y puntos de automatización.</span>
+          </div>
+          <div class="focus-item">
+            <strong>Implementación</strong>
+            <span>Integramos herramientas con sistemas, datos y equipos existentes.</span>
+          </div>
+          <div class="focus-item">
+            <strong>IA útil</strong>
+            <span>OCR, agentes RAG y asistentes orientados a tareas concretas.</span>
+          </div>
+          <div class="focus-item">
+            <strong>Evolución continua</strong>
+            <span>Medimos uso, iteramos rápido y mejoramos adopción y resultados.</span>
+          </div>
+        </div>
+      </aside>
+
+      <section class="about card">
+        <h2>Quiénes somos</h2>
+        <p class="intro-copy">En <strong>Yago SpA</strong> ayudamos a optimizar procesos críticos con soluciones tecnológicas personalizadas e inteligencia artificial aplicada. Operamos como aliado de implementación y mejora continua.</p>
+
+        <div class="quote">"La automatización debe sentirse como una capacidad estratégica construida junto al cliente y conectada con su operación."</div>
+
+        <div class="mini-title">Cómo trabajamos</div>
+        <ul class="check-list">
+          <li>Personalizamos cada solución según la realidad operativa del cliente.</li>
+          <li>Iteramos rápido y aplicamos IA donde mejora eficiencia y trazabilidad.</li>
+        </ul>
+      </section>
+
+      <section class="services card">
+        <h2>Servicios que ofrecemos</h2>
+        <p class="section-copy">Soluciones de IA y automatización para áreas comerciales, operativas y documentales.</p>
+
+        <div class="services-list">
+          <article class="service-line">
+            <small>01</small>
+            <div>
+              <h4>Procesos empresariales</h4>
+              <p>Automatización y trazabilidad.</p>
+            </div>
+          </article>
+          <article class="service-line">
+            <small>02</small>
+            <div>
+              <h4>Prospección de leads</h4>
+              <p>Captura y seguimiento comercial.</p>
+            </div>
+          </article>
+          <article class="service-line">
+            <small>03</small>
+            <div>
+              <h4>Documentación inteligente</h4>
+              <p>Conocimiento operativo escalable.</p>
+            </div>
+          </article>
+          <article class="service-line">
+            <small>04</small>
+            <div>
+              <h4>OCR e integración API</h4>
+              <p>Extracción estructurada para sistemas.</p>
+            </div>
+          </article>
+          <article class="service-line">
+            <small>05</small>
+            <div>
+              <h4>Agentes RAG</h4>
+              <p>Respuestas contextuales con datos internos.</p>
+            </div>
+          </article>
+          <article class="service-line">
+            <small>06</small>
+            <div>
+              <h4>Licitaciones y presupuestos</h4>
+              <p>Análisis documental y cotización asistida.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="projects card">
+        <h2>Soluciones y proyectos destacados</h2>
+        <p class="section-copy">Combinamos automatización, datos y experiencia de usuario para resolver procesos concretos.</p>
+
+        <div class="project-grid">
+          <article class="project">
+            <small>Prospección comercial</small>
+            <h4>Plataforma all-in-one</h4>
+            <p>Centraliza investigación de leads, contacto comercial, seguimiento y gestión de oportunidades.</p>
+          </article>
+          <article class="project">
+            <small>Documentación asistida</small>
+            <h4>Procedura</h4>
+            <p>Herramienta con IA para convertir instrucciones y conocimiento operativo en documentación útil.</p>
+          </article>
+          <article class="project">
+            <small>Extracción de datos</small>
+            <h4>Servicio OCR vía API</h4>
+            <p>Procesa documentos e imágenes con extracción estructurada e integración rápida.</p>
+          </article>
+        </div>
+
+        <div class="cred-row">
+          <div class="cred-box">
+            <h3>Experiencia y colaboraciones</h3>
+            <p>Hemos trabajado con organizaciones de distintos rubros en procesos documentales, comerciales y regulatorios.</p>
+            <p style="margin-top: 1.5mm; font-size: 7.4pt; font-weight: 800; color: var(--primary);">MV Arquitectura &amp; Construcción · GrupoExpro · PSOL</p>
+          </div>
+          <div class="cred-box" style="background: linear-gradient(180deg, #f0f9ff 0%, #e2f1fb 100%);">
+            <h3>Proyecto en desarrollo</h3>
+            <p>Actualmente desarrollamos un proyecto relacionado con el <strong>Servicio de Evaluación Ambiental (SEA)</strong>, orientado a procesos donde información, contexto y trazabilidad son determinantes.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact card">
+        <div class="diff-panel">
+          <h3>Diferenciales</h3>
+          <p class="contact-copy">Combinamos visión tecnológica y criterio de negocio.</p>
+          <ul class="diff-list" style="margin-top: 1.6mm;">
+            <li>Soluciones a medida para necesidades reales, no plantillas genéricas.</li>
+            <li>IA aplicada al proceso y capacidad de integración con sistemas.</li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="mini-title" style="margin-top: 0; margin-bottom: 1mm;">Sectores con los que colaboramos</div>
+          <p class="contact-copy" style="font-size: 7.2pt;">Offshore, constructoras, gestión medioambiental, empresas de servicios y operaciones internacionales.</p>
+        </div>
+
+        <div class="contact-compact">
+          <strong>Contacto</strong>
+          nicolas.yarur.g@yago.cl · +56 9 6393 0231 · yago.cl
+        </div>
+
+        <p class="foot">Yago SpA · Automatización inteligente para empresas · Soluciones adaptadas a cada operación</p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

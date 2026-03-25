@@ -1,0 +1,2 @@
+file,mime_type,status,document_family,country,variant,decision,global_confidence,review_required,page_count,processing_engine,extraction_source,issue_types,error
+IMG_0820.HEIC,image/heic,ok,identity,CL,identity-cl-front-text,human_review,0.86,True,1,heuristic-visual-ocr,rapidocr-local,MISSING_FIELD|RULE_DATE_CONSISTENCY,

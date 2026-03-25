@@ -1,0 +1,280 @@
+{
+  "rag": {
+    "retrieved_document_id": null
+  },
+  "fields": {
+    "mrz": {
+      "value": null,
+      "locations": [],
+      "confidence": null
+    },
+    "sex": {
+      "value": "M",
+      "locations": [],
+      "confidence": null
+    },
+    "address": {
+      "fields": {
+        "city": {
+          "value": null,
+          "locations": [],
+          "confidence": null
+        },
+        "state": {
+          "value": null,
+          "locations": [],
+          "confidence": null
+        },
+        "street": {
+          "value": null,
+          "locations": [],
+          "confidence": null
+        },
+        "country": {
+          "value": null,
+          "locations": [],
+          "confidence": null
+        },
+        "postal_code": {
+          "value": null,
+          "locations": [],
+          "confidence": null
+        }
+      },
+      "locations": [],
+      "confidence": null
+    },
+    "category": {
+      "value": null,
+      "locations": [],
+      "confidence": null
+    },
+    "last_name": {
+      "value": "YARUR GÓNGORA",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.3289861034779747,
+              0.42273120302779504
+            ],
+            [
+              0.46845471112967596,
+              0.41920487095698605
+            ],
+            [
+              0.4674548205507851,
+              0.3796585820534642
+            ],
+            [
+              0.3279862128990838,
+              0.3831849141242732
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "first_name": {
+      "value": "NICOLAS FAELLES",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.5697280763043955,
+              0.4311429603826103
+            ],
+            [
+              0.330579,
+              0.439365
+            ],
+            [
+              0.3312078607348652,
+              0.4576562599385961
+            ],
+            [
+              0.5703569370392607,
+              0.4494342203212064
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "document_id": {
+      "value": "B64.872.150",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.746384,
+              0.518016
+            ],
+            [
+              0.6029357115925168,
+              0.5211352722749625
+            ],
+            [
+              0.603306,
+              0.538164
+            ],
+            [
+              0.7467542884074831,
+              0.5350447277250376
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "expiry_date": {
+      "value": "2035-10-13",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.757748,
+              0.553274
+            ],
+            [
+              0.6069178850981464,
+              0.5578196436796172
+            ],
+            [
+              0.6074312030905504,
+              0.5748521735549056
+            ],
+            [
+              0.7582613179924039,
+              0.5703065298752884
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "issued_date": {
+      "value": "2025-12-02",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.3373093169284949,
+              0.5836030278871934
+            ],
+            [
+              0.4793982902307542,
+              0.57892898500141
+            ],
+            [
+              0.4787960996471293,
+              0.5606226399698307
+            ],
+            [
+              0.33670712634487,
+              0.5652966828556142
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "nationality": {
+      "value": "CHILENA",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.332645,
+              0.51143
+            ],
+            [
+              0.4436705786962892,
+              0.5083162978553923
+            ],
+            [
+              0.443182,
+              0.490895
+            ],
+            [
+              0.3321564213037108,
+              0.49400870214460785
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "country_code": {
+      "value": "CHL",
+      "locations": [],
+      "confidence": null
+    },
+    "date_of_birth": {
+      "value": "2005-10-13",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.3352297607969496,
+              0.5475496086247306
+            ],
+            [
+              0.4860858813684259,
+              0.5427957031869028
+            ],
+            [
+              0.485512601774561,
+              0.5246037688574792
+            ],
+            [
+              0.3346564812030847,
+              0.5293576742953068
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    },
+    "place_of_birth": {
+      "value": null,
+      "locations": [],
+      "confidence": null
+    },
+    "issuing_authority": {
+      "value": "SERVICIO DE REGISTRO CIVIL E IDENTIFICACIÓN",
+      "locations": [
+        {
+          "page": 0,
+          "polygon": [
+            [
+              0.325413,
+              0.363425
+            ],
+            [
+              0.6397733851705657,
+              0.3533410435592795
+            ],
+            [
+              0.6394381653409881,
+              0.3428907966386082
+            ],
+            [
+              0.32507778017042244,
+              0.3529747530793287
+            ]
+          ]
+        }
+      ],
+      "confidence": null
+    }
+  },
+  "raw_text": null
+}

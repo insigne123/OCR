@@ -1,0 +1,84 @@
+{
+  "config": {
+    "folder": "test-data",
+    "pattern": "IMG_082?.HEIC",
+    "limit": 3,
+    "visual_engine": "auto",
+    "structured_mode": "auto",
+    "ensemble_mode": "always",
+    "ensemble_engines": "rapidocr,google-documentai,azure-document-intelligence",
+    "field_adjudication_mode": "auto"
+  },
+  "summary": {
+    "total_files": 3,
+    "processed_ok": 3,
+    "failed": 0,
+    "average_confidence": 0.86,
+    "by_decision": {
+      "human_review": 3
+    },
+    "by_family": {
+      "identity": 3
+    },
+    "by_country": {
+      "CL": 3
+    },
+    "unsupported_or_review": 3
+  },
+  "results": [
+    {
+      "file": "IMG_0820.HEIC",
+      "mime_type": "image/heic",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "human_review",
+      "global_confidence": 0.86,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "MISSING_FIELD",
+        "RULE_DATE_CONSISTENCY"
+      ]
+    },
+    {
+      "file": "IMG_0821.HEIC",
+      "mime_type": "image/heic",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "human_review",
+      "global_confidence": 0.86,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "MISSING_FIELD",
+        "RULE_DATE_CONSISTENCY"
+      ]
+    },
+    {
+      "file": "IMG_0822.HEIC",
+      "mime_type": "image/heic",
+      "status": "ok",
+      "document_family": "identity",
+      "country": "CL",
+      "variant": "identity-cl-front-text",
+      "decision": "human_review",
+      "global_confidence": 0.86,
+      "review_required": true,
+      "page_count": 1,
+      "processing_engine": "heuristic-visual-ocr",
+      "extraction_source": "rapidocr-local",
+      "issue_types": [
+        "MISSING_FIELD",
+        "RULE_DATE_CONSISTENCY"
+      ]
+    }
+  ]
+}
