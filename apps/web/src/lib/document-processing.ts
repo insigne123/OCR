@@ -675,7 +675,7 @@ export async function processDocumentJob(documentId: string) {
 }
 
 export async function finalizeProcessedDocument(documentId: string, currentDocument?: DocumentRecord | null) {
-  const current = currentDocument ?? (await getDocumentById(documentId));
+  const current = currentDocument ?? (await getDocumentByIdInternal(documentId));
   if (!current) {
     return null;
   }
