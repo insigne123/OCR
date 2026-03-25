@@ -40,6 +40,7 @@ class PreprocessedPage:
     variant_images: dict[str, bytes] = field(default_factory=dict)
     page_profile_map: dict[str, str] = field(default_factory=dict)
     corners: list[list[float]] = field(default_factory=list)
+    document_box: list[int] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -226,6 +227,7 @@ def _prepare_image_with_pillow(file_bytes: bytes, page_texts: list[str] | None =
             variant_images=serialize_variant_images(rescue_plan.variant_images),
             page_profile_map=dict(rescue_plan.page_profiles),
             corners=[[x, y] for x, y in rescue_plan.corners],
+            document_box=list(rescue_plan.document_box) if rescue_plan.document_box else [],
         )
     ]
 
@@ -282,6 +284,7 @@ def prepare_document_pages(
                     variant_images=serialize_variant_images(rescue_plan.variant_images),
                     page_profile_map=dict(rescue_plan.page_profiles),
                     corners=[[x, y] for x, y in rescue_plan.corners],
+                    document_box=list(rescue_plan.document_box) if rescue_plan.document_box else [],
                 )
             )
         return prepared_pages

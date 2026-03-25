@@ -1,7 +1,10 @@
 import os
 import json
+from io import BytesIO
 
 from fastapi import APIRouter, File, Form, Header, HTTPException, UploadFile
+import fitz
+from PIL import Image, ImageOps
 
 from app.engines.factory import get_visual_ocr_engine
 from app.engines.factory import get_visual_ocr_runtime_details
@@ -34,6 +37,44 @@ from app.services.document_splitter import split_document_pages
 
 
 router = APIRouter()
+
+
+def _append_file_to_pdf(doc: fitz.Document, file_bytes: bytes, filename: str, content_type: str | None) -> None:
+    suffix = (filename.rsplit('.', 1)[-1].lower() if '.' in filename else '')
+    if (content_type or '').lower() == 'application/pdf' or suffix == 'pdf':
+        source = fitz.open(stream=file_bytes, filetype='pdf')
+        try:
+            doc.insert_pdf(source)
+        finally:
+            source.close()
+        return
+
+    image = Image.open(BytesIO(file_bytes))
+    image = ImageOps.exif_transpose(image).convert('RGB')
+    output = BytesIO()
+    image.save(output, format='PDF')
+    source = fitz.open(stream=output.getvalue(), filetype='pdf')
+    try:
+        doc.insert_pdf(source)
+    finally:
+        source.close()
+
+
+def _combine_front_back_uploads(
+    front_bytes: bytes,
+    front_name: str,
+    front_type: str | None,
+    back_bytes: bytes,
+    back_name: str,
+    back_type: str | None,
+) -> tuple[bytes, str, str]:
+    document = fitz.open()
+    try:
+        _append_file_to_pdf(document, front_bytes, front_name, front_type)
+        _append_file_to_pdf(document, back_bytes, back_name, back_type)
+        return document.tobytes(), f"front-back-{front_name.rsplit('.', 1)[0]}.pdf", "application/pdf"
+    finally:
+        document.close()
 
 
 def _extract_source_context(file_bytes: bytes, filename: str, content_type: str | None) -> tuple[str, list[str], LayoutExtractionResult]:
@@ -161,6 +202,51 @@ async def process_document(
         file_bytes,
         file.filename or "documento.pdf",
         file.content_type,
+        document_family,
+        country,
+        resolved_response_mode,
+        ocr_visual_engine=ocr_visual_engine,
+        decision_profile=decision_profile,
+        tenant_id=tenant_id,
+        structured_mode_override=ocr_structured_mode,
+        ocr_ensemble_mode=ocr_ensemble_mode,
+        ocr_ensemble_engines=ocr_ensemble_engines,
+        field_adjudication_mode=field_adjudication_mode,
+    )
+
+
+@router.post("/process/front-back", response_model=ProcessResponse)
+async def process_front_back_document(
+    front_file: UploadFile = File(...),
+    back_file: UploadFile = File(...),
+    document_family: str = Form("identity"),
+    country: str = Form("CL"),
+    response_mode: str = Form("json"),
+    ocr_visual_engine: str | None = Form(default=None),
+    decision_profile: str | None = Form(default=None),
+    tenant_id: str | None = Form(default=None),
+    ocr_structured_mode: str | None = Form(default=None),
+    ocr_ensemble_mode: str | None = Form(default=None),
+    ocr_ensemble_engines: str | None = Form(default=None),
+    field_adjudication_mode: str | None = Form(default=None),
+    x_api_key: str | None = Header(default=None),
+) -> ProcessResponse:
+    _ensure_api_key(x_api_key)
+    front_bytes = await front_file.read()
+    back_bytes = await back_file.read()
+    merged_bytes, merged_filename, merged_content_type = _combine_front_back_uploads(
+        front_bytes,
+        front_file.filename or "front.jpg",
+        front_file.content_type,
+        back_bytes,
+        back_file.filename or "back.jpg",
+        back_file.content_type,
+    )
+    resolved_response_mode = "full" if response_mode == "full" else "json"
+    return run_processing_pipeline(
+        merged_bytes,
+        merged_filename,
+        merged_content_type,
         document_family,
         country,
         resolved_response_mode,

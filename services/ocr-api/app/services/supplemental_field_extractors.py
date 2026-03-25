@@ -146,6 +146,9 @@ def extract_driver_license_chile_fields(prepared_pages: list[PreprocessedPage]) 
     image = Image.open(BytesIO(prepared_pages[0].image_bytes)).convert("RGB")
     address_text = _ocr_crop(image, (0.46, 0.62, 0.90, 0.69), engine_name="rapidocr")
     category_text = _ocr_crop(image, (0.46, 0.48, 0.52, 0.55), engine_name="rapidocr")
+    dates_text = _ocr_crop(image, (0.38, 0.32, 0.90, 0.60), engine_name="rapidocr")
+    name_text = _ocr_crop(image, (0.30, 0.12, 0.88, 0.36), engine_name="rapidocr")
+    authority_text = _ocr_crop(image, (0.06, 0.06, 0.42, 0.20), engine_name="rapidocr")
     category_match = re.search(r"\b([A-E])\b", category_text.upper())
     address = _cleanup_driver_address(address_text)
 
@@ -162,6 +165,26 @@ def extract_driver_license_chile_fields(prepared_pages: list[PreprocessedPage]) 
         supplemental["address"] = address
     if category_match:
         supplemental["categories"] = category_match.group(1)
+    normalized_dates = _extract_normalized_dates(dates_text)
+    if normalized_dates:
+        supplemental.setdefault("birth_date", normalized_dates[0])
+        if len(normalized_dates) >= 2:
+            supplemental.setdefault("expiry_date", normalized_dates[-1])
+        if len(normalized_dates) >= 3:
+            supplemental.setdefault("issue_date", normalized_dates[-2])
+    authority_match = re.search(r"\b(LA REINA|SANTIAGO|PROVIDENCIA|NUNOA|LAS CONDES)\b", authority_text.upper())
+    if authority_match:
+        supplemental["authority"] = authority_match.group(1)
+    if name_text.strip() and "NOMBRES" in name_text.upper():
+        names = re.sub(r"\s+", " ", name_text.upper())
+        first_match = re.search(r"NOMBRES?\s+([A-Z ]{3,30})", names)
+        last_match = re.search(r"APELLIDOS?\s+([A-Z ]{3,40})", names)
+        if first_match:
+            supplemental["first_name"] = _normalize_spaces(first_match.group(1))
+        if last_match:
+            supplemental["last_name"] = _normalize_spaces(last_match.group(1))
+        if supplemental.get("first_name") or supplemental.get("last_name"):
+            supplemental["holder_name"] = _normalize_spaces(" ".join(part for part in [supplemental.get("first_name"), supplemental.get("last_name")] if part))
     return supplemental
 
 

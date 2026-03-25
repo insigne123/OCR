@@ -29,6 +29,7 @@ class CaptureRescuePlan:
     perspective_applied: bool
     capture_conditions: tuple[str, ...]
     page_profiles: dict[str, str]
+    document_box: tuple[int, int, int, int] | None = None
 
 
 def _serialize_png(image: Image.Image) -> bytes:
@@ -235,6 +236,19 @@ def _crop_document(image: Image.Image) -> tuple[Image.Image, float, float, tuple
     return cropped, round(crop_area / total_area, 3), document_coverage, crop_box
 
 
+def _zoom_document_crop(image: Image.Image, crop_box: tuple[int, int, int, int] | None, document_coverage: float) -> Image.Image | None:
+    if crop_box is None or document_coverage >= 0.62:
+        return None
+    left, top, right, bottom = crop_box
+    width, height = image.size
+    margin_x = max(2, int((right - left) * 0.02))
+    margin_y = max(2, int((bottom - top) * 0.02))
+    zoom_box = (max(0, left + margin_x), max(0, top + margin_y), min(width, right - margin_x), min(height, bottom - margin_y))
+    if zoom_box[2] - zoom_box[0] < 32 or zoom_box[3] - zoom_box[1] < 32:
+        return None
+    return image.crop(zoom_box)
+
+
 def _compress_highlights(image: Image.Image) -> Image.Image:
     lut = []
     for value in range(256):
@@ -351,6 +365,9 @@ def _capture_conditions(
         conditions.append("glare")
     if crop_ratio < 0.94 or document_coverage < 0.82:
         conditions.append("cropped")
+    if document_coverage < 0.58:
+        conditions.append("small_document_in_frame")
+        conditions.append("needs_zoom_crop")
     if abs(skew_angle) >= 2.5:
         conditions.append("tilt")
     if perspective_applied:
@@ -376,7 +393,7 @@ def build_capture_rescue_plan(image: Image.Image, quality_hint: float | None = N
     perspective_image = _correct_perspective(base, corners) if perspective_applied else base
     skew_applied = abs(skew_angle) >= 2.5
     normalized_base = _rotate_with_canvas(perspective_image, -skew_angle) if skew_applied else perspective_image
-    cropped, crop_ratio, document_coverage, _ = _crop_document(normalized_base)
+    cropped, crop_ratio, document_coverage, crop_box = _crop_document(normalized_base)
     cropped = _resize_for_ocr(cropped)
 
     variants: dict[str, Image.Image] = {"original": cropped}
@@ -418,6 +435,10 @@ def build_capture_rescue_plan(image: Image.Image, quality_hint: float | None = N
     if abs(skew_angle) >= 4.5:
         variants["rotate_left_4" if skew_angle > 0 else "rotate_right_4"] = _rotate_with_canvas(cropped, -4 if skew_angle > 0 else 4)
         rescue_profiles.append("rotate_left_4" if skew_angle > 0 else "rotate_right_4")
+    zoom_crop = _zoom_document_crop(normalized_base, crop_box, document_coverage)
+    if zoom_crop is not None:
+        variants["zoom_crop"] = _resize_for_ocr(zoom_crop)
+        rescue_profiles.append("zoom_crop")
 
     profile_priority = {
         "aggressive_rescue": 0,
@@ -451,6 +472,7 @@ def build_capture_rescue_plan(image: Image.Image, quality_hint: float | None = N
         perspective_applied=perspective_applied,
         capture_conditions=conditions,
         page_profiles=page_profiles,
+        document_box=crop_box,
     )
 
 

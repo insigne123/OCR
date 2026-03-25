@@ -295,6 +295,7 @@ def _evaluate_identity(
     birth_date = _resolve_pack_value(values, pack, "birth_date", ("fecha-de-nacimiento",))
     issue_date = _resolve_pack_value(values, pack, "issue_date", ("fecha-de-emision",))
     expiry_date = _resolve_pack_value(values, pack, "expiry_date", ("fecha-de-vencimiento",))
+    sex_value = _resolve_pack_value(values, pack, "sex", ("sexo",))
     run_value = _resolve_pack_value(values, pack, "run", ("run",))
     mrz_value = _resolve_pack_value(values, pack, "mrz", ("mrz",))
     back_evidence = [
@@ -416,6 +417,30 @@ def _evaluate_identity(
                 "medium",
                 "No se detectaron fechas suficientes para validar identidad y vigencia.",
                 "Revisar visualmente el documento o aumentar la calidad del OCR.",
+            )
+        )
+
+    if country == "CL" and resolved_document_side == "front" and _is_missing(sex_value):
+        issues.append(
+            _make_issue(
+                "rule-identity-missing-sex-front",
+                "RULE_LOW_EVIDENCE",
+                "sexo",
+                "medium",
+                "No se detecto el sexo en el frente de la cedula chilena.",
+                "Reintentar OCR focalizado en el bloque central derecho antes de autoaceptar el documento.",
+            )
+        )
+
+    if country == "CL" and resolved_document_side == "front" and _is_missing(issue_date):
+        issues.append(
+            _make_issue(
+                "rule-identity-missing-issue-date-front",
+                "RULE_REQUIRED_FIELD",
+                "fecha_de_emision",
+                "medium",
+                "No se detecto una fecha de emision confiable en el frente de la cedula chilena.",
+                "Reintentar OCR focalizado sobre el bloque de fechas antes de autoaceptar el documento.",
             )
         )
 
