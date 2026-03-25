@@ -44,6 +44,7 @@ WARNING_AUTO_ACCEPT_TYPES = {
     "date_format",
     "date_anomaly",
     "date_inconsistency",
+    "RULE_DATE_CONSISTENCY",
     "field_confusion",
     "field_clarity",
     "text",
@@ -394,15 +395,15 @@ def _evaluate_identity(
             )
         )
 
-    if country == "CL" and requires_front and _is_missing(mrz_value):
+    if country == "CL" and requires_back and _is_missing(mrz_value):
         issues.append(
             _make_issue(
                 "rule-identity-missing-mrz-cl",
                 "RULE_LOW_EVIDENCE",
                 "mrz",
                 "low",
-                "No se detecto MRZ o zona legible por maquina para el documento chileno.",
-                "Si el flujo lo exige, revisar visualmente la zona inferior del documento.",
+                "No se detecto MRZ o zona legible por maquina para un dorso de documento chileno.",
+                "Si el flujo requiere autoaceptacion, revisar visualmente la banda MRZ del dorso.",
             )
         )
 
@@ -467,9 +468,9 @@ def _evaluate_identity(
                             "rule-identity-date-order",
                             "RULE_DATE_CONSISTENCY",
                             "fecha_de_vencimiento",
-                            "high",
+                            "medium" if resolved_document_side == "front" else "high",
                             "La fecha de vencimiento no puede ser anterior o igual a la fecha de emision.",
-                            "Corregir las fechas detectadas antes de aceptar el caso.",
+                            "Reintentar OCR focalizado sobre el bloque de fechas o corregir las fechas detectadas antes de aceptar el caso.",
                         )
                     )
             except ValueError:

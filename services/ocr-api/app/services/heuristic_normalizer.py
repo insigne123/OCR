@@ -223,6 +223,7 @@ def _calculate_identity_confidence(
     birth_date: str | None,
     issue_date: str | None,
     expiry_date: str | None,
+    sex: str | None,
     mrz: str | None,
     back_field_count: int,
     requires_front_fields: bool,
@@ -230,7 +231,11 @@ def _calculate_identity_confidence(
 ) -> float:
     critical_checks = [_has_value(holder_name), _has_value(document_number), _has_value(birth_date)]
     if country.upper() == "CL" and requires_front_fields:
-        critical_checks.append(_has_value(run))
+        critical_checks.extend([_has_value(run), _has_value(expiry_date)])
+        if _has_value(sex):
+            critical_checks.append(True)
+    if country.upper() == "CL" and requires_back_fields:
+        critical_checks.extend([_has_value(run), _has_value(mrz)])
 
     date_checks = [_has_value(birth_date), _has_value(issue_date), _has_value(expiry_date)]
     score = 0.34
@@ -244,6 +249,8 @@ def _calculate_identity_confidence(
         score += 0.1
     if _has_value(mrz):
         score += 0.05
+    elif requires_back_fields:
+        score -= 0.02
     if _date_sequence_is_valid(birth_date, issue_date, expiry_date):
         score += 0.03
     if country.upper() in {"PE", "CO"} and _has_value(document_number):
@@ -1418,17 +1425,20 @@ def normalize_identity_text(
 
     if mrz:
         confidence += 0.08
-    elif country.upper() == "CL" and requires_front_fields:
+    elif country.upper() == "CL" and requires_back_fields:
         issues.append(
             _make_issue(
                 "issue-missing-mrz",
                 "LOW_EVIDENCE",
                 "MRZ",
                 "low",
-                "No se detecto una linea MRZ o equivalente valida en el texto disponible.",
-                "Confirmar manualmente la zona legible por maquina si aplica al tipo documental.",
+                "No se detecto una MRZ legible en un documento que aparenta ser dorso de cedula chilena.",
+                "Confirmar manualmente la banda MRZ o mejorar recorte/contraste del dorso.",
             )
         )
+
+    if effective_side == "front" and issue_date and expiry_date and expiry_date <= issue_date and supplemental.get("expiry_date") and supplemental.get("expiry_date") != issue_date:
+        expiry_date = supplemental["expiry_date"]
 
     back_field_count = _non_empty_back_field_count(back_fields)
     if back_field_count:
@@ -1484,7 +1494,7 @@ def normalize_identity_text(
                 ["Nacionalidad", nationality or "NO DETECTADA"],
                 ["Sexo", sex or "NO DETECTADO"],
                 ["RUN", run or "NO DETECTADO"],
-                ["MRZ", mrz or "NO DETECTADA"],
+                ["MRZ", mrz or ("NO ESPERADA EN FRENTE" if effective_side == "front" else "NO DETECTADA")],
             ],
         ),
         ReportSection(
@@ -1541,6 +1551,7 @@ def normalize_identity_text(
             birth_date=birth_date,
             issue_date=issue_date,
             expiry_date=expiry_date,
+            sex=sex,
             mrz=mrz,
             back_field_count=back_field_count,
             requires_front_fields=requires_front_fields,
@@ -1548,7 +1559,7 @@ def normalize_identity_text(
         ),
         assumptions=[
             *assumptions,
-            "La validacion de identidad permanece conservadora para evitar autoaprobacion agresiva.",
+            "La validacion de identidad es side-aware y ajusta expectativas segun frente/dorso.",
             "Se aplicaron heuristicas por pais para buscar identificadores, fechas y nombres antes de decidir review.",
             f"Contexto de lado documental: {effective_side or 'front'}.",
         ],

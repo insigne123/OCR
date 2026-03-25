@@ -949,6 +949,7 @@ def _build_identity_cross_side_normalized(
         document_family="identity",
         country="CL",
         pack_id="identity-cl-front",
+        document_side="front",
     )
     front_normalized = _heuristic_normalize(front_request, front_text, supplemental_fields=front_supplemental)
     back_normalized = _heuristic_normalize(back_request, back_text)
@@ -2395,6 +2396,7 @@ def run_processing_pipeline(
         document_family=effective_family,
         country=effective_country,
         pack_id=effective_pack_id,
+        document_side=effective_document_side,
     )
     normalization_started_at = datetime.now(timezone.utc).isoformat()
     normalization_started_counter = perf_counter()

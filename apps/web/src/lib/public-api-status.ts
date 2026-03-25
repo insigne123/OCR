@@ -231,6 +231,70 @@ export async function buildPublicSubmissionEnvelope(submission: PublicSubmission
   };
 }
 
+export function buildPublicResultSummary(envelope: Awaited<ReturnType<typeof buildPublicSubmissionEnvelope>>) {
+  const result = envelope.result;
+  if (!result) {
+    return envelope;
+  }
+
+  const keyFieldNames = new Set([
+    "nombre-completo",
+    "nombres",
+    "apellidos",
+    "run",
+    "numero-de-documento",
+    "numero",
+    "fecha-de-nacimiento",
+    "fecha-de-emision",
+    "fecha-de-vencimiento",
+    "sexo",
+    "nacionalidad",
+    "lugar-de-nacimiento",
+  ]);
+
+  return {
+    submission: envelope.submission,
+    result: {
+      documentId: result.documentId,
+      status: result.status,
+      decision: result.decision,
+      reviewRequired: result.reviewRequired,
+      processedAt: result.processedAt,
+      globalConfidence: result.globalConfidence,
+      documentFamily: result.documentFamily,
+      country: result.country,
+      variant: result.variant,
+      issuer: result.issuer,
+      holderName: result.holderName,
+      keyFields: result.extractedFields
+        .filter((field) => keyFieldNames.has(field.fieldName))
+        .slice(0, 12)
+        .map((field) => ({
+          fieldName: field.fieldName,
+          label: field.label,
+          value: field.normalizedValue,
+          confidence: field.confidence,
+          pageNumber: field.pageNumber,
+        })),
+      issues: result.issues.slice(0, 6),
+      processingMetadata: {
+        documentSide: result.processingMetadata.documentSide,
+        classificationConfidence: result.processingMetadata.classificationConfidence,
+        extractionSource: result.processingMetadata.extractionSource,
+        processingEngine: result.processingMetadata.processingEngine,
+        confidenceDetails: result.processingMetadata.confidenceDetails,
+        integrityAssessment: result.processingMetadata.integrityAssessment,
+        qualityAssessment: result.processingMetadata.qualityAssessment,
+      },
+      counts: {
+        extractedFields: result.extractedFields.length,
+        reportSections: result.reportSections.length,
+        issues: result.issues.length,
+      },
+    },
+  };
+}
+
 export async function buildPublicBatchStatus(batch: PublicBatchRecord): Promise<PublicBatchStatusSnapshot> {
   const submissions = await listPublicBatchSubmissions(batch.id);
   const statuses = await Promise.all(submissions.map((submission) => buildPublicSubmissionStatus(submission)));

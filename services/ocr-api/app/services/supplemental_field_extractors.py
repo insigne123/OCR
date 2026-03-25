@@ -7,6 +7,7 @@ from PIL import Image, ImageEnhance, ImageOps
 
 from app.engines.azure_document_intelligence import has_azure_document_intelligence_config
 from app.engines.factory import get_visual_ocr_engine
+from app.services.field_value_utils import canonicalize_chile_run, canonicalize_identity_document_number, normalize_date_value, parse_identity_card_mrz
 from app.services.page_preprocessing import PreprocessedPage
 
 CHILE_ADDRESS_WORDS = (
@@ -21,6 +22,11 @@ CHILE_ADDRESS_WORDS = (
     "DEPARTAMENTO",
 )
 COMMON_GIVEN_NAMES = ("NICOLAS", "PAOLA", "ANDREA", "SOFIA", "MATEO", "JUAN", "MARIA", "JOSE")
+TEXTUAL_DATE_PATTERN = re.compile(r"\b\d{2}\s*[A-Z]{3}\s*\d{4}\b")
+LABELLED_DATE_PATTERN = re.compile(
+    r"(FECHA\s+DE\s+NACIMIENTO|FECHA\s+DE\s+EMISION|FECHA\s+DE\s+VENCIMIENTO)\s*([0-9A-Z ]{7,16})",
+    re.IGNORECASE,
+)
 
 
 def _crop_image(image: Image.Image, box: tuple[float, float, float, float]) -> Image.Image:
@@ -65,29 +71,72 @@ def _cleanup_driver_address(text: str) -> str | None:
         (
             index
             for index, token in enumerate(tokens)
-            if token.isdigit()
-            and len(token) <= 5
-            and int(token) < 1900
-            and index >= 2
-            and all(tokens[index - offset].isalpha() for offset in (1, 2))
+            if token.isdigit() and len(token) <= 5 and int(token) < 1900 and index >= 2 and all(tokens[index - offset].isalpha() for offset in (1, 2))
         ),
         None,
     )
-    if number_index is not None:
-        start_index = max(0, number_index - 2)
-        address_tokens = tokens[start_index : number_index + 1]
-        suffix_index = number_index + 1
-        while suffix_index < len(tokens) and tokens[suffix_index] in {"CASA", "DEPTO", "DEPARTAMENTO", "OF", "J", "A", "B", "C"}:
-            address_tokens.append(tokens[suffix_index])
-            suffix_index += 1
-        candidate = _normalize_spaces(" ".join(address_tokens))
-        if len(address_tokens) < 3:
-            return None
-    else:
+    if number_index is None:
         return None
-    if len(candidate) < 8:
-        return None
-    return candidate
+    start_index = max(0, number_index - 2)
+    address_tokens = tokens[start_index : number_index + 1]
+    suffix_index = number_index + 1
+    while suffix_index < len(tokens) and tokens[suffix_index] in {"CASA", "DEPTO", "DEPARTAMENTO", "OF", "J", "A", "B", "C"}:
+        address_tokens.append(tokens[suffix_index])
+        suffix_index += 1
+    candidate = _normalize_spaces(" ".join(address_tokens))
+    return candidate if len(candidate) >= 8 else None
+
+
+def _extract_normalized_dates(text: str) -> list[str]:
+    values: list[str] = []
+    for match in TEXTUAL_DATE_PATTERN.findall(text.upper()):
+        normalized = normalize_date_value(match)
+        if normalized and normalized not in values:
+            values.append(normalized)
+    return values
+
+
+def _normalize_identity_compact_name(token: str) -> str | None:
+    compact = re.sub(r"[^A-Z]", "", token.upper())
+    for given_name in sorted(COMMON_GIVEN_NAMES, key=len, reverse=True):
+        if compact.startswith(given_name) and len(compact) > len(given_name) + 2:
+            return _normalize_spaces(f"{given_name} {compact[len(given_name):]}")
+    return _normalize_spaces(token) if token else None
+
+
+def _extract_identity_front_dates(text: str) -> dict[str, str]:
+    normalized = _normalize_spaces(text.upper())
+    values: dict[str, str] = {}
+
+    for label, raw_value in LABELLED_DATE_PATTERN.findall(normalized):
+        parsed = normalize_date_value(raw_value)
+        if not parsed:
+            continue
+        upper_label = label.upper()
+        if "NACIMIENTO" in upper_label:
+            values["birth_date"] = parsed
+        elif "EMISION" in upper_label:
+            values["issue_date"] = parsed
+        elif "VENCIMIENTO" in upper_label:
+            values["expiry_date"] = parsed
+
+    dates = sorted(dict.fromkeys(_extract_normalized_dates(normalized)))
+    if dates:
+        values.setdefault("birth_date", dates[0])
+        if len(dates) >= 2:
+            values.setdefault("expiry_date", dates[-1])
+        if len(dates) >= 3:
+            values.setdefault("issue_date", dates[-2])
+    return values
+
+
+def _extract_gender_from_text(text: str) -> str | None:
+    normalized = _normalize_spaces(text.upper())
+    match = re.search(r"SEXO\s*([MFX])\b", normalized)
+    if match:
+        return match.group(1)
+    standalone = re.findall(r"\b([MF])\b", normalized)
+    return standalone[0] if standalone else None
 
 
 def extract_driver_license_chile_fields(prepared_pages: list[PreprocessedPage]) -> dict[str, str]:
@@ -116,61 +165,108 @@ def extract_driver_license_chile_fields(prepared_pages: list[PreprocessedPage]) 
     return supplemental
 
 
-def _normalize_identity_compact_name(token: str) -> str | None:
-    compact = re.sub(r"[^A-Z]", "", token.upper())
-    for given_name in sorted(COMMON_GIVEN_NAMES, key=len, reverse=True):
-        if compact.startswith(given_name) and len(compact) > len(given_name) + 2:
-            return _normalize_spaces(f"{given_name} {compact[len(given_name):]}")
-    return _normalize_spaces(token) if token else None
-
-
-def extract_identity_chile_fields(prepared_pages: list[PreprocessedPage]) -> dict[str, str]:
-    if not prepared_pages or not has_azure_document_intelligence_config():
+def extract_identity_chile_front_fields(prepared_pages: list[PreprocessedPage]) -> dict[str, str]:
+    if not prepared_pages:
         return {}
 
     image = Image.open(BytesIO(prepared_pages[0].image_bytes)).convert("RGB")
-    combined = _ocr_crop(image, (0.24, 0.30, 0.72, 0.56), engine_name="azure-document-intelligence")
-    normalized = re.sub(r"\s+", " ", combined.upper())
     supplemental: dict[str, str] = {}
 
-    first_name_match = re.search(r"NOMBRES\s+([A-Z ]{3,30}?)\s+(?:SEXO|NACIONALIDAD|FECHA|NUMERO|RUN)\b", normalized)
+    names_text = _ocr_crop(image, (0.22, 0.20, 0.76, 0.50), engine_name="rapidocr")
+    normalized_names = _normalize_spaces(names_text.upper())
+    first_name_match = re.search(r"NOMBRES\s+([A-Z ]{3,30}?)\s+(?:SEXO|NACIONALIDAD|FECHA|NUMERO|RUN)\b", normalized_names)
     if first_name_match:
         expanded = _normalize_identity_compact_name(first_name_match.group(1))
         if expanded:
             supplemental["first_names"] = expanded
-
-    surname_match = re.search(r"APELLIDOS\s+([A-Z ]{3,40})\s+NOMBRES", normalized)
+    surname_match = re.search(r"APELLIDOS\s+([A-Z ]{3,40})\s+NOMBRES", normalized_names)
     if surname_match:
         supplemental["last_names"] = _normalize_spaces(surname_match.group(1))
-
     if supplemental.get("first_names") or supplemental.get("last_names"):
         supplemental["holder_name"] = _normalize_spaces(" ".join(part for part in [supplemental.get("first_names"), supplemental.get("last_names")] if part))
 
-    sex_match = re.search(r"SEXO\s+([MFX])\b", normalized)
-    if sex_match:
-        supplemental["sex"] = sex_match.group(1)
+    sex_text = _ocr_crop(image, (0.52, 0.26, 0.77, 0.49), engine_name="rapidocr")
+    sex_value = _extract_gender_from_text(sex_text)
+    if sex_value:
+        supplemental["sex"] = sex_value
 
-    issuer_match = re.search(r"SERVICIO DE REGISTRO CIVIL E IDENTIFICACI[OÓ]N", normalized)
-    if issuer_match:
-        supplemental["issuer"] = "SERVICIO DE REGISTRO CIVIL E IDENTIFICACION"
+    document_number_text = _ocr_crop(image, (0.60, 0.34, 0.95, 0.60), engine_name="rapidocr")
+    document_number = canonicalize_identity_document_number("CL", document_number_text)
+    if document_number:
+        supplemental["document_number"] = document_number
 
-    date_matches = re.findall(r"\b\d{2}\s*[A-Z]{3}\s*\d{4}\b", normalized)
-    normalized_dates = []
-    for candidate in date_matches:
-        value = candidate.replace(" ", "")
-        month_map = {"ENE": "01", "FEB": "02", "MAR": "03", "ABR": "04", "MAY": "05", "JUN": "06", "JUL": "07", "AGO": "08", "SEP": "09", "SET": "09", "OCT": "10", "NOV": "11", "DIC": "12"}
-        match = re.match(r"(\d{2})([A-Z]{3})(\d{4})", value)
-        if match and match.group(2) in month_map:
-            normalized_dates.append(f"{match.group(3)}-{month_map[match.group(2)]}-{match.group(1)}")
-    normalized_dates = sorted(dict.fromkeys(normalized_dates))
-    if normalized_dates:
-        supplemental.setdefault("birth_date", normalized_dates[0])
-        if len(normalized_dates) >= 2:
-            supplemental.setdefault("expiry_date", normalized_dates[-1])
-        if len(normalized_dates) >= 3:
-            supplemental.setdefault("issue_date", normalized_dates[-2])
+    run_text = _ocr_crop(image, (0.02, 0.72, 0.36, 0.95), engine_name="rapidocr")
+    run_value = canonicalize_chile_run(run_text)
+    if run_value:
+        supplemental["run"] = run_value
+
+    dates_text = _ocr_crop(image, (0.30, 0.42, 0.96, 0.74), engine_name="rapidocr")
+    supplemental.update(_extract_identity_front_dates(dates_text))
+
+    issuer_text = _ocr_crop(image, (0.23, 0.10, 0.80, 0.24), engine_name="rapidocr")
+    if "REGISTRO CIVIL" in issuer_text.upper():
+        supplemental["issuer"] = "REGISTRO CIVIL E IDENTIFICACION"
+
+    if has_azure_document_intelligence_config():
+        combined = _ocr_crop(image, (0.24, 0.30, 0.72, 0.56), engine_name="azure-document-intelligence")
+        normalized = re.sub(r"\s+", " ", combined.upper())
+        if not supplemental.get("first_names"):
+            first_name_match = re.search(r"NOMBRES\s+([A-Z ]{3,30}?)\s+(?:SEXO|NACIONALIDAD|FECHA|NUMERO|RUN)\b", normalized)
+            if first_name_match:
+                expanded = _normalize_identity_compact_name(first_name_match.group(1))
+                if expanded:
+                    supplemental["first_names"] = expanded
+        if not supplemental.get("last_names"):
+            surname_match = re.search(r"APELLIDOS\s+([A-Z ]{3,40})\s+NOMBRES", normalized)
+            if surname_match:
+                supplemental["last_names"] = _normalize_spaces(surname_match.group(1))
+        if not supplemental.get("holder_name") and (supplemental.get("first_names") or supplemental.get("last_names")):
+            supplemental["holder_name"] = _normalize_spaces(" ".join(part for part in [supplemental.get("first_names"), supplemental.get("last_names")] if part))
+        if not supplemental.get("sex"):
+            sex_match = re.search(r"SEXO\s+([MFX])\b", normalized)
+            sex_value = sex_match.group(1) if sex_match else None
+            if sex_value:
+                supplemental["sex"] = sex_value
+        if "REGISTRO CIVIL" in normalized:
+            supplemental.setdefault("issuer", "REGISTRO CIVIL E IDENTIFICACION")
+        supplemental.update({key: value for key, value in _extract_identity_front_dates(normalized).items() if key not in supplemental})
 
     return supplemental
+
+
+def extract_identity_chile_back_fields(prepared_pages: list[PreprocessedPage]) -> dict[str, str]:
+    if not prepared_pages:
+        return {}
+
+    image = Image.open(BytesIO(prepared_pages[0].image_bytes)).convert("RGB")
+    supplemental: dict[str, str] = {}
+    mrz_text = _ocr_crop(image, (0.03, 0.70, 0.98, 0.98), engine_name="rapidocr")
+    parsed = parse_identity_card_mrz(mrz_text)
+    mrz_value = parsed.get("mrz")
+    if isinstance(mrz_value, str) and mrz_value:
+        supplemental["mrz"] = mrz_value
+    for key in ("document_number", "run", "birth_date", "expiry_date", "sex", "first_names", "last_names", "holder_name"):
+        value = parsed.get(key)
+        if isinstance(value, str) and value:
+            supplemental[key] = value
+
+    birth_place_text = _ocr_crop(image, (0.22, 0.36, 0.80, 0.60), engine_name="rapidocr")
+    normalized = _normalize_spaces(birth_place_text.upper())
+    match = re.search(r"NACIO\s+EN[:\s]+([A-Z ]{4,30})", normalized)
+    if match:
+        supplemental["birth_place"] = _normalize_spaces(match.group(1))
+    elif "NACIO EN" in normalized:
+        parts = [part.strip() for part in normalized.split("NACIO EN", 1)[-1].split() if part.strip()]
+        if parts:
+            supplemental["birth_place"] = _normalize_spaces(" ".join(parts[:3]))
+
+    return supplemental
+
+
+def extract_identity_chile_fields(prepared_pages: list[PreprocessedPage], document_side: str | None = None, pack_id: str | None = None) -> dict[str, str]:
+    if document_side == "back" or (pack_id and "back" in pack_id):
+        return extract_identity_chile_back_fields(prepared_pages)
+    return extract_identity_chile_front_fields(prepared_pages)
 
 
 def extract_supplemental_fields(
@@ -179,9 +275,10 @@ def extract_supplemental_fields(
     document_family: str,
     country: str,
     pack_id: str | None,
+    document_side: str | None = None,
 ) -> dict[str, str]:
     if document_family == "identity" and country.upper() == "CL":
-        return extract_identity_chile_fields(prepared_pages)
+        return extract_identity_chile_fields(prepared_pages, document_side=document_side, pack_id=pack_id)
     if document_family == "driver_license" and country.upper() == "CL":
         return extract_driver_license_chile_fields(prepared_pages)
     return {}

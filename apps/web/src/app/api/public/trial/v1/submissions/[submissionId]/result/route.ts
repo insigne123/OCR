@@ -1,5 +1,5 @@
 import { ensureTrialApiClient } from "@/lib/public-api-auth";
-import { buildPublicSubmissionEnvelope, getPublicSubmissionOrThrow } from "@/lib/public-api-status";
+import { buildPublicResultSummary, buildPublicSubmissionEnvelope, getPublicSubmissionOrThrow } from "@/lib/public-api-status";
 import { TrialAccessError, assertTrialClientActive, buildTrialUsageSnapshot } from "@/lib/public-trial";
 
 type RouteContext = {
@@ -17,7 +17,9 @@ export async function GET(request: Request, { params }: RouteContext) {
     if (!submission || submission.apiClientId !== client.id) {
       return Response.json({ error: "Submission not found." }, { status: 404 });
     }
-    return Response.json({ usage: await buildTrialUsageSnapshot(client), ...(await buildPublicSubmissionEnvelope(submission)) });
+    const envelope = await buildPublicSubmissionEnvelope(submission);
+    const view = new URL(request.url).searchParams.get("view");
+    return Response.json({ usage: await buildTrialUsageSnapshot(client), ...((view === "full") ? envelope : buildPublicResultSummary(envelope)) });
   } catch (error) {
     if (error instanceof TrialAccessError) {
       return Response.json({ error: error.message }, { status: error.status });

@@ -1,5 +1,5 @@
 import { ensurePublicApiClient } from "@/lib/public-api-auth";
-import { buildPublicSubmissionEnvelope, getPublicSubmissionOrThrow } from "@/lib/public-api-status";
+import { buildPublicResultSummary, buildPublicSubmissionEnvelope, getPublicSubmissionOrThrow } from "@/lib/public-api-status";
 
 type RouteContext = {
   params: Promise<{ submissionId: string }>;
@@ -15,5 +15,7 @@ export async function GET(request: Request, { params }: RouteContext) {
     return Response.json({ error: "Submission not found." }, { status: 404 });
   }
 
-  return Response.json(await buildPublicSubmissionEnvelope(submission));
+  const envelope = await buildPublicSubmissionEnvelope(submission);
+  const view = new URL(request.url).searchParams.get("view");
+  return Response.json(view === "summary" ? buildPublicResultSummary(envelope) : envelope);
 }
